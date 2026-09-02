@@ -20,7 +20,7 @@ export default function AdminLoginPage() {
             Painel administrativo
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Entre com suas credenciais para gerenciar leads, carros e posts.
+            Entre com suas credenciais para gerenciar leads e carros.
           </p>
 
           <div className="mt-6">

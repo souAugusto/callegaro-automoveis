@@ -41,6 +41,5 @@ export function whatsappLink(message?: string) {
 export const mainNav = [
   { label: 'Início', href: '/' },
   { label: 'Estoque', href: '/estoque' },
-  { label: 'Blog', href: '/blog' },
   { label: 'Contato', href: '/contato' },
 ]

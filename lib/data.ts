@@ -40,17 +40,6 @@ export interface Lead {
   createdAt: string // ISO
 }
 
-export interface Post {
-  id: string
-  slug: string
-  title: string
-  excerpt: string
-  cover: string
-  author: string
-  date: string // ISO
-  content: string // markdown-like simples (parágrafos separados por \n\n)
-}
-
 /* ------------------------------------------------------------------ */
 /* Carros                                                              */
 /* ------------------------------------------------------------------ */
@@ -280,93 +269,6 @@ export const leads: Lead[] = [
 ]
 
 /* ------------------------------------------------------------------ */
-/* Blog                                                                */
-/* ------------------------------------------------------------------ */
-
-export const posts: Post[] = [
-  {
-    id: 'post-1',
-    slug: 'manutencao-preventiva-do-carro',
-    title: 'Manutenção preventiva: o segredo para o carro durar mais',
-    excerpt:
-      'Pequenos cuidados no dia a dia evitam grandes dores de cabeça (e gastos) no futuro. Veja o checklist essencial da Callegaro Automóveis.',
-    cover: '/blog/manutencao-preventiva.png',
-    author: 'Equipe Callegaro Automóveis',
-    date: daysAgo(4),
-    content: `Manter o carro em dia não é luxo, é economia. A manutenção preventiva é aquela que você faz antes de o problema aparecer, evitando que uma peça barata comprometa um conjunto caro.
-
-O primeiro ponto de atenção é o óleo do motor. Verifique o nível pelo menos uma vez por mês e respeite o intervalo de troca indicado no manual, geralmente entre 5.000 e 10.000 km. Óleo velho perde a capacidade de lubrificar e acelera o desgaste do motor.
-
-Fique de olho também nos itens de segurança: pastilhas e discos de freio, pneus e suspensão. Pneus carecas ou calibrados de forma errada aumentam o consumo de combustível e o risco de acidentes. O ideal é calibrar a cada 15 dias, sempre com os pneus frios.
-
-Não ignore os ruídos e luzes do painel. Um barulho novo ao frear ou uma luz acesa é o carro pedindo atenção. Quanto antes você levar a um profissional de confiança, menor tende a ser o custo do reparo.
-
-Por fim, mantenha um histórico das revisões. Além de garantir a segurança da família, um carro com manutenção documentada vale mais na hora da revenda. Na ${SITE_NAME}, todos os nossos seminovos passam por uma checagem completa antes de irem para a loja.`,
-  },
-  {
-    id: 'post-2',
-    slug: 'como-conseguir-financiamento-consignado',
-    title: 'Como conseguir financiamento consignado para o seu carro',
-    excerpt:
-      'O crédito consignado pode ser uma porta de entrada para sair de carro novo com parcelas menores. Entenda como funciona.',
-    cover: '/blog/financiamento-consignado.png',
-    author: `Equipe ${site.shortName}`,
-    date: daysAgo(8),
-    content: `O financiamento consignado é aquele em que a parcela é descontada diretamente da folha de pagamento ou do benefício do INSS. Por ter menos risco de inadimplência para o banco, ele costuma oferecer juros mais baixos do que o financiamento tradicional de veículos.
-
-Para conseguir, o primeiro passo é verificar se a sua categoria tem convênio: servidores públicos, aposentados e pensionistas do INSS e funcionários de empresas conveniadas são os públicos mais comuns. Vale confirmar também qual a sua margem consignável disponível, ou seja, quanto do seu salário ainda pode ser comprometido.
-
-Com a margem em mãos, simule o valor da parcela antes de escolher o carro. Assim você define uma faixa de preço realista e evita comprometer o orçamento. Lembre-se: uma boa compra é aquela cuja parcela cabe tranquilamente no seu bolso.
-
-Separe os documentos com antecedência: identidade, CPF, comprovante de renda e de residência costumam ser suficientes. Quanto mais organizada a documentação, mais rápida é a aprovação.
-
-Na ${SITE_NAME} nós ajudamos você a encontrar a melhor linha de crédito, incluindo o consignado, e cuidamos de toda a burocracia. Fale com a nossa equipe e descubra as condições para o seu perfil.`,
-  },
-  {
-    id: 'post-3',
-    slug: 'dicas-para-comprar-o-primeiro-carro',
-    title: '7 dicas para comprar o seu primeiro carro sem erro',
-    excerpt:
-      'Comprar o primeiro carro é um momento especial. Para não errar, separamos dicas práticas de quem vive o mercado todos os dias.',
-    cover: '/blog/primeiro-carro.png',
-    author: `Equipe ${site.shortName}`,
-    date: daysAgo(15),
-    content: `Comprar o primeiro carro é a realização de um sonho, mas exige planejamento para não virar dor de cabeça. A primeira dica é definir o orçamento total, e não apenas o valor do carro: inclua documentação, seguro, IPVA e manutenção.
-
-A segunda dica é escolher um modelo popular. Carros como Gol, Uno, Onix e HB20 têm peças acessíveis, mão de obra barata e boa revenda. Para quem está começando, isso faz muita diferença no bolso.
-
-Terceiro: priorize a procedência. Compre de uma loja de confiança, que apresente o histórico do veículo e a documentação regularizada. Desconfie de preços muito abaixo do mercado.
-
-Quarto: faça uma vistoria. Leve o carro a um mecânico de confiança ou compre de quem já entrega o veículo revisado. Confira pneus, freios, suspensão e sinais de batida.
-
-Quinto: teste o carro. Dirija em diferentes situações, sinta os freios, o câmbio e escute o motor. O carro precisa ser confortável para o seu dia a dia.
-
-Sexto: negocie com calma. Pesquise o preço de tabela e use isso a seu favor. Uma boa loja vai ser transparente sobre o valor.
-
-Sétimo: planeje o financiamento. Dê a maior entrada possível e escolha um prazo que não comprometa o orçamento. Na ${SITE_NAME}, orientamos cada cliente para que a primeira compra seja segura e tranquila.`,
-  },
-  {
-    id: 'post-4',
-    slug: 'documentacao-e-transferencia-de-veiculo',
-    title: 'Documentação e transferência de veículo: guia completo',
-    excerpt:
-      'Comprou um seminovo? Saiba exatamente quais documentos você precisa e como transferir o carro para o seu nome com segurança.',
-    cover: '/blog/documentacao-transferencia.png',
-    author: `Equipe ${site.shortName}`,
-    date: daysAgo(20),
-    content: `Transferir um veículo para o seu nome é obrigatório e, quando feito da forma certa, é simples. O prazo legal é de 30 dias a partir da compra para evitar multas.
-
-O documento central é o CRV (Certificado de Registro de Veículo), o antigo DUT. Nele, o vendedor preenche os dados do comprador e reconhece firma da assinatura em cartório. Hoje muitos estados já utilizam a versão digital (ATPV-e), que agiliza o processo.
-
-Antes de fechar negócio, confirme se o veículo está sem débitos: IPVA, licenciamento, multas e eventuais restrições ou financiamentos em aberto. Um carro com pendências pode impedir a transferência.
-
-O comprador precisa providenciar vistoria do veículo, pagamento das taxas do Detran e, em alguns casos, do ITBI veicular. Com tudo pago e a documentação preenchida, o registro é atualizado e o novo CRV sai no nome do comprador.
-
-A boa notícia: ao comprar na ${SITE_NAME}, a nossa equipe cuida de toda a documentação e transferência para você. Entregamos o carro com a papelada em dia e total segurança jurídica, para você só se preocupar em aproveitar a estrada.`,
-  },
-]
-
-/* ------------------------------------------------------------------ */
 /* Helpers                                                             */
 /* ------------------------------------------------------------------ */
 
@@ -409,17 +311,6 @@ export function getFlagshipCar(): Car | undefined {
 // TODO: substituir por SELECT ... WHERE slug = ?
 export function getCarBySlug(slug: string): Car | undefined {
   return cars.find((c) => c.slug === slug)
-}
-
-// TODO: substituir por SELECT ... WHERE slug = ?
-export function getPostBySlug(slug: string): Post | undefined {
-  return posts.find((p) => p.slug === slug)
-}
-
-export function getAllPosts(): Post[] {
-  return [...posts].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-  )
 }
 
 export function slugify(text: string): string {
@@ -465,32 +356,6 @@ export function deleteCar(id: string): void {
 // Garante que só um carro por vez seja o carro-chefe da home.
 export function setFlagshipCar(id: string): void {
   for (const c of cars) c.isFlagship = c.id === id
-}
-
-export function getPostById(id: string): Post | undefined {
-  return posts.find((p) => p.id === id)
-}
-
-export function addPost(input: Omit<Post, 'id' | 'slug'>): Post {
-  const post: Post = {
-    ...input,
-    id: `post-${Date.now()}`,
-    slug: slugify(input.title),
-  }
-  posts.unshift(post)
-  return post
-}
-
-export function updatePost(id: string, input: Omit<Post, 'id' | 'slug'>): Post | undefined {
-  const post = getPostById(id)
-  if (!post) return undefined
-  Object.assign(post, input)
-  return post
-}
-
-export function deletePost(id: string): void {
-  const index = posts.findIndex((p) => p.id === id)
-  if (index !== -1) posts.splice(index, 1)
 }
 
 export function getLeadById(id: string): Lead | undefined {

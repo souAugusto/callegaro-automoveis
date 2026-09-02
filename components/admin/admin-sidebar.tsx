@@ -6,7 +6,6 @@ import {
   LayoutDashboard,
   Users,
   Car,
-  Newspaper,
   ExternalLink,
   LogOut,
 } from 'lucide-react'
@@ -17,7 +16,6 @@ const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/leads', label: 'Leads', icon: Users },
   { href: '/admin/carros', label: 'Carros', icon: Car },
-  { href: '/admin/posts', label: 'Posts', icon: Newspaper },
 ]
 
 export function AdminSidebar({ logoutAction }: { logoutAction: () => void }) {

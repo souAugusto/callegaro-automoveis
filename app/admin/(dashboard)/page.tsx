@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { Car, Users, Newspaper, TrendingUp } from 'lucide-react'
-import { cars, leads, posts, formatBRL, formatDate } from '@/lib/data'
+import { Car, Users, TrendingUp } from 'lucide-react'
+import { cars, leads, formatBRL, formatDate } from '@/lib/data'
 import { Badge } from '@/components/ui/badge'
 import { leadStatusStyles } from '@/components/admin/lead-status-styles'
 
@@ -14,7 +14,6 @@ export default function AdminDashboardPage() {
   const stats = [
     { label: 'Carros no estoque', value: cars.length, icon: Car, hint: `${availableCars} disponíveis` },
     { label: 'Leads novos', value: newLeads, icon: Users, hint: `${leads.length} no total` },
-    { label: 'Posts publicados', value: posts.length, icon: Newspaper, hint: 'no blog' },
     {
       label: 'Valor em estoque',
       value: formatBRL(inventoryValue),
@@ -33,10 +32,10 @@ export default function AdminDashboardPage() {
         Dashboard
       </h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Visão geral do estoque, leads e conteúdo do site.
+        Visão geral do estoque e dos leads recebidos pelo site.
       </p>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {stats.map((s) => (
           <div
             key={s.label}
