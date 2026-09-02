@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { cars } from '@/lib/data'
+import { SITE_NAME } from '@/lib/site'
 import { EstoqueBrowser } from '@/components/estoque/estoque-browser'
 
 export const metadata: Metadata = {
   title: 'Estoque de Seminovos',
-  description:
-    'Confira o estoque de carros populares e seminovos da AutoCenter Parobé. Filtre por marca, preço e câmbio.',
+  description: `Confira o estoque de carros populares e seminovos da ${SITE_NAME}. Filtre por marca, preço e câmbio.`,
 }
 
 export default function EstoquePage() {

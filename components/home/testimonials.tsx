@@ -13,7 +13,7 @@ const testimonials = [
     name: 'Juliana Souza',
     car: 'Hyundai HB20 2019',
     photo: '/depoimentos/cliente-2.png',
-    text: 'Comprei meu primeiro carro na AutoCenter e foi tudo transparente. Me explicaram cada detalhe da documentação. Saí de carro novo no mesmo dia!',
+    text: 'Comprei meu primeiro carro na Callegaro Automóveis e foi tudo transparente. Me explicaram cada detalhe da documentação. Saí de carro novo no mesmo dia!',
   },
   {
     name: 'Anderson Rocha',

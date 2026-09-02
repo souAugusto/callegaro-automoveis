@@ -1,16 +1,18 @@
 // Configuração central da loja (dados fictícios).
 // TODO: mover para variáveis de ambiente / banco de dados ao plugar o backend.
 
+export const SITE_NAME = 'Callegaro Automóveis'
+
 export const site = {
-  name: 'AutoCenter Parobé',
-  shortName: 'AutoCenter',
+  name: SITE_NAME,
+  shortName: 'Callegaro',
   city: 'Parobé',
   state: 'RS',
   // Número usado nos links do WhatsApp (formato internacional, só dígitos).
   whatsapp: '5551999990000',
   whatsappDisplay: '(51) 99999-0000',
   phone: '(51) 3543-0000',
-  email: 'contato@autocenterparobe.com.br',
+  email: 'contato@callegaroautomoveis.com.br',
   address: 'Av. do Trabalhador, 1234 - Centro, Parobé - RS, 95630-000',
   hours: [
     { label: 'Segunda a Sexta', value: '08h30 às 18h30' },

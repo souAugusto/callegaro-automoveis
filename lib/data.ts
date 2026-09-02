@@ -2,6 +2,8 @@
 // TODO: conectar a um banco de dados real (ex: Supabase) e substituir estes
 // arrays por consultas. Cada função abaixo é o ponto de integração.
 
+import { SITE_NAME, site } from './site'
+
 export type CarStatus = 'Disponível' | 'Reservado' | 'Vendido'
 export type Transmission = 'Manual' | 'Automático'
 export type Fuel = 'Flex' | 'Gasolina' | 'Diesel'
@@ -278,9 +280,9 @@ export const posts: Post[] = [
     slug: 'manutencao-preventiva-do-carro',
     title: 'Manutenção preventiva: o segredo para o carro durar mais',
     excerpt:
-      'Pequenos cuidados no dia a dia evitam grandes dores de cabeça (e gastos) no futuro. Veja o checklist essencial da AutoCenter Parobé.',
+      'Pequenos cuidados no dia a dia evitam grandes dores de cabeça (e gastos) no futuro. Veja o checklist essencial da Callegaro Automóveis.',
     cover: '/blog/manutencao-preventiva.png',
-    author: 'Equipe AutoCenter',
+    author: 'Equipe Callegaro Automóveis',
     date: daysAgo(4),
     content: `Manter o carro em dia não é luxo, é economia. A manutenção preventiva é aquela que você faz antes de o problema aparecer, evitando que uma peça barata comprometa um conjunto caro.
 
@@ -290,7 +292,7 @@ Fique de olho também nos itens de segurança: pastilhas e discos de freio, pneu
 
 Não ignore os ruídos e luzes do painel. Um barulho novo ao frear ou uma luz acesa é o carro pedindo atenção. Quanto antes você levar a um profissional de confiança, menor tende a ser o custo do reparo.
 
-Por fim, mantenha um histórico das revisões. Além de garantir a segurança da família, um carro com manutenção documentada vale mais na hora da revenda. Na AutoCenter Parobé, todos os nossos seminovos passam por uma checagem completa antes de irem para a loja.`,
+Por fim, mantenha um histórico das revisões. Além de garantir a segurança da família, um carro com manutenção documentada vale mais na hora da revenda. Na ${SITE_NAME}, todos os nossos seminovos passam por uma checagem completa antes de irem para a loja.`,
   },
   {
     id: 'post-2',
@@ -299,7 +301,7 @@ Por fim, mantenha um histórico das revisões. Além de garantir a segurança da
     excerpt:
       'O crédito consignado pode ser uma porta de entrada para sair de carro novo com parcelas menores. Entenda como funciona.',
     cover: '/blog/financiamento-consignado.png',
-    author: 'Equipe AutoCenter',
+    author: `Equipe ${site.shortName}`,
     date: daysAgo(8),
     content: `O financiamento consignado é aquele em que a parcela é descontada diretamente da folha de pagamento ou do benefício do INSS. Por ter menos risco de inadimplência para o banco, ele costuma oferecer juros mais baixos do que o financiamento tradicional de veículos.
 
@@ -309,7 +311,7 @@ Com a margem em mãos, simule o valor da parcela antes de escolher o carro. Assi
 
 Separe os documentos com antecedência: identidade, CPF, comprovante de renda e de residência costumam ser suficientes. Quanto mais organizada a documentação, mais rápida é a aprovação.
 
-Na AutoCenter Parobé nós ajudamos você a encontrar a melhor linha de crédito, incluindo o consignado, e cuidamos de toda a burocracia. Fale com a nossa equipe e descubra as condições para o seu perfil.`,
+Na ${SITE_NAME} nós ajudamos você a encontrar a melhor linha de crédito, incluindo o consignado, e cuidamos de toda a burocracia. Fale com a nossa equipe e descubra as condições para o seu perfil.`,
   },
   {
     id: 'post-3',
@@ -318,7 +320,7 @@ Na AutoCenter Parobé nós ajudamos você a encontrar a melhor linha de crédito
     excerpt:
       'Comprar o primeiro carro é um momento especial. Para não errar, separamos dicas práticas de quem vive o mercado todos os dias.',
     cover: '/blog/primeiro-carro.png',
-    author: 'Equipe AutoCenter',
+    author: `Equipe ${site.shortName}`,
     date: daysAgo(15),
     content: `Comprar o primeiro carro é a realização de um sonho, mas exige planejamento para não virar dor de cabeça. A primeira dica é definir o orçamento total, e não apenas o valor do carro: inclua documentação, seguro, IPVA e manutenção.
 
@@ -332,7 +334,7 @@ Quinto: teste o carro. Dirija em diferentes situações, sinta os freios, o câm
 
 Sexto: negocie com calma. Pesquise o preço de tabela e use isso a seu favor. Uma boa loja vai ser transparente sobre o valor.
 
-Sétimo: planeje o financiamento. Dê a maior entrada possível e escolha um prazo que não comprometa o orçamento. Na AutoCenter Parobé, orientamos cada cliente para que a primeira compra seja segura e tranquila.`,
+Sétimo: planeje o financiamento. Dê a maior entrada possível e escolha um prazo que não comprometa o orçamento. Na ${SITE_NAME}, orientamos cada cliente para que a primeira compra seja segura e tranquila.`,
   },
   {
     id: 'post-4',
@@ -341,7 +343,7 @@ Sétimo: planeje o financiamento. Dê a maior entrada possível e escolha um pra
     excerpt:
       'Comprou um seminovo? Saiba exatamente quais documentos você precisa e como transferir o carro para o seu nome com segurança.',
     cover: '/blog/documentacao-transferencia.png',
-    author: 'Equipe AutoCenter',
+    author: `Equipe ${site.shortName}`,
     date: daysAgo(20),
     content: `Transferir um veículo para o seu nome é obrigatório e, quando feito da forma certa, é simples. O prazo legal é de 30 dias a partir da compra para evitar multas.
 
@@ -351,7 +353,7 @@ Antes de fechar negócio, confirme se o veículo está sem débitos: IPVA, licen
 
 O comprador precisa providenciar vistoria do veículo, pagamento das taxas do Detran e, em alguns casos, do ITBI veicular. Com tudo pago e a documentação preenchida, o registro é atualizado e o novo CRV sai no nome do comprador.
 
-A boa notícia: ao comprar na AutoCenter Parobé, a nossa equipe cuida de toda a documentação e transferência para você. Entregamos o carro com a papelada em dia e total segurança jurídica, para você só se preocupar em aproveitar a estrada.`,
+A boa notícia: ao comprar na ${SITE_NAME}, a nossa equipe cuida de toda a documentação e transferência para você. Entregamos o carro com a papelada em dia e total segurança jurídica, para você só se preocupar em aproveitar a estrada.`,
   },
 ]
 

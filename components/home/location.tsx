@@ -54,7 +54,7 @@ export function Location() {
           <div className="overflow-hidden rounded-2xl border border-white/10">
             <iframe
               src={site.mapEmbedUrl}
-              title="Mapa da localização da AutoCenter Parobé"
+              title={`Mapa da localização da ${site.name}`}
               className="h-full min-h-75 w-full"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

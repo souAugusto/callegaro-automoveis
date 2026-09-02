@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Inter, Oswald } from 'next/font/google'
 import './globals.css'
+import { SITE_NAME } from '@/lib/site'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -18,11 +19,11 @@ const oswald = Oswald({
 
 export const metadata: Metadata = {
   title: {
-    default: 'AutoCenter Parobé | Carros seminovos com financiamento facilitado',
-    template: '%s | AutoCenter Parobé',
+    default: `${SITE_NAME} | Carros seminovos com financiamento facilitado`,
+    template: `%s | ${SITE_NAME}`,
   },
   description:
-    'Loja de carros populares e seminovos em Parobé/RS. Realize seu sonho e saia de carro novo hoje mesmo com financiamento facilitado, negociação justa e documentação segura.',
+    `Loja de carros populares e seminovos em Parobé/RS. Realize seu sonho e saia de carro novo hoje mesmo com financiamento facilitado, negociação justa e documentação segura.`,
   generator: 'v0.app',
   keywords: [
     'carros seminovos',
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
     'financiamento de carros',
     'Parobé',
     'Rio Grande do Sul',
-    'AutoCenter Parobé',
+    SITE_NAME,
   ],
 }
 
