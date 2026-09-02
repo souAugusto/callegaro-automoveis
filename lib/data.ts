@@ -24,6 +24,7 @@ export interface Car {
   images: string[]
   status: CarStatus
   featured: boolean
+  isFlagship: boolean
   description: string
 }
 
@@ -71,6 +72,7 @@ export const cars: Car[] = [
     images: ['/cars/vw-gol.png'],
     status: 'Disponível',
     featured: true,
+    isFlagship: false,
     description:
       'Volkswagen Gol 1.6 Comfortline completo, revisado e com pneus novos. Econômico, espaçoso e pronto para rodar. Aceitamos seu usado na troca e temos financiamento facilitado.',
   },
@@ -90,6 +92,7 @@ export const cars: Car[] = [
     images: ['/cars/fiat-uno.png'],
     status: 'Disponível',
     featured: true,
+    isFlagship: false,
     description:
       'Fiat Uno Vivace 1.0, o popular ideal para o dia a dia e para quem busca economia. Baixo custo de manutenção e ótimo primeiro carro. Documentação em dia.',
   },
@@ -109,6 +112,7 @@ export const cars: Car[] = [
     images: ['/cars/chevrolet-onix.png'],
     status: 'Disponível',
     featured: true,
+    isFlagship: true,
     description:
       'Chevrolet Onix 1.4 LT, um dos carros mais vendidos do Brasil. Multimídia, direção elétrica e excelente estado de conservação. Único dono, revisões em concessionária.',
   },
@@ -128,6 +132,7 @@ export const cars: Car[] = [
     images: ['/cars/ford-ka.png'],
     status: 'Disponível',
     featured: true,
+    isFlagship: false,
     description:
       'Ford Ka 1.0 SE completo, design moderno e ótimo espaço interno. Ar-condicionado gelando, ideal para cidade e estrada. Financiamento com aprovação rápida.',
   },
@@ -147,6 +152,7 @@ export const cars: Car[] = [
     images: ['/cars/renault-sandero.png'],
     status: 'Disponível',
     featured: true,
+    isFlagship: false,
     description:
       'Renault Sandero 1.6 Expression, um dos hatchs mais espaçosos da categoria. Porta-malas gigante, muito confortável e econômico. Aceita troca.',
   },
@@ -166,6 +172,7 @@ export const cars: Car[] = [
     images: ['/cars/hyundai-hb20.png'],
     status: 'Disponível',
     featured: true,
+    isFlagship: false,
     description:
       'Hyundai HB20 1.0 Comfort Plus, moderno, econômico e com baixa quilometragem. Multimídia, sensor de ré e garantia de procedência. Realize o sonho do carro seminovo.',
   },
@@ -185,6 +192,7 @@ export const cars: Car[] = [
     images: ['/cars/vw-fox.png'],
     status: 'Reservado',
     featured: false,
+    isFlagship: false,
     description:
       'Volkswagen Fox 1.0 Trend, alto, espaçoso e muito econômico. Perfeito para família. Mecânica revisada e pronto para transferir.',
   },
@@ -204,6 +212,7 @@ export const cars: Car[] = [
     images: ['/cars/fiat-palio.png'],
     status: 'Disponível',
     featured: false,
+    isFlagship: false,
     description:
       'Fiat Palio 1.0 Attractive, excelente custo-benefício e baixo consumo. Ótima opção de entrada com parcelas que cabem no bolso. Documentação segura.',
   },
@@ -388,8 +397,13 @@ export function formatDate(iso: string): string {
 }
 
 // TODO: substituir por SELECT ... WHERE featured = true
-export function getFeaturedCars(): Car[] {
-  return cars.filter((c) => c.featured).slice(0, 6)
+export function getFeaturedCars(excludeId?: string): Car[] {
+  return cars.filter((c) => c.featured && c.id !== excludeId).slice(0, 6)
+}
+
+// TODO: substituir por SELECT ... WHERE is_flagship = true LIMIT 1
+export function getFlagshipCar(): Car | undefined {
+  return cars.find((c) => c.isFlagship) ?? cars.find((c) => c.featured) ?? cars[0]
 }
 
 // TODO: substituir por SELECT ... WHERE slug = ?
@@ -446,6 +460,11 @@ export function updateCar(id: string, input: Omit<Car, 'id' | 'slug'>): Car | un
 export function deleteCar(id: string): void {
   const index = cars.findIndex((c) => c.id === id)
   if (index !== -1) cars.splice(index, 1)
+}
+
+// Garante que só um carro por vez seja o carro-chefe da home.
+export function setFlagshipCar(id: string): void {
+  for (const c of cars) c.isFlagship = c.id === id
 }
 
 export function getPostById(id: string): Post | undefined {

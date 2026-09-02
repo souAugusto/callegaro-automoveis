@@ -6,6 +6,7 @@ import {
   addCar,
   updateCar,
   deleteCar,
+  setFlagshipCar,
   type Car,
   type CarStatus,
   type Transmission,
@@ -29,6 +30,7 @@ function parseCarInput(formData: FormData): Omit<Car, 'id' | 'slug'> | { error: 
   const price = Number(formData.get('price'))
   const status = String(formData.get('status') || '') as CarStatus
   const featured = formData.get('featured') === 'on'
+  const isFlagship = formData.get('isFlagship') === 'on'
   const description = String(formData.get('description') || '').trim()
   const images = String(formData.get('images') || '')
     .split('\n')
@@ -56,6 +58,7 @@ function parseCarInput(formData: FormData): Omit<Car, 'id' | 'slug'> | { error: 
     images: images.length > 0 ? images : ['/placeholder.svg'],
     status,
     featured,
+    isFlagship,
     description,
   }
 }
@@ -67,9 +70,11 @@ export async function createCarAction(
   const input = parseCarInput(formData)
   if ('error' in input) return input
 
-  addCar(input)
+  const car = addCar(input)
+  if (input.isFlagship) setFlagshipCar(car.id)
   revalidatePath('/admin/carros')
   revalidatePath('/estoque')
+  revalidatePath('/')
   redirect('/admin/carros')
 }
 
@@ -81,9 +86,11 @@ export async function updateCarAction(
   const input = parseCarInput(formData)
   if ('error' in input) return input
 
-  updateCar(id, input)
+  const car = updateCar(id, input)
+  if (car && input.isFlagship) setFlagshipCar(car.id)
   revalidatePath('/admin/carros')
   revalidatePath('/estoque')
+  revalidatePath('/')
   redirect('/admin/carros')
 }
 
@@ -93,4 +100,5 @@ export async function removeCar(formData: FormData) {
   revalidatePath('/admin/carros')
   revalidatePath('/estoque')
   revalidatePath('/admin')
+  revalidatePath('/')
 }

@@ -165,15 +165,30 @@ export function CarForm({
         />
       </div>
 
-      <label className="flex w-fit items-center gap-2 text-sm text-white">
-        <input
-          type="checkbox"
-          name="featured"
-          defaultChecked={car?.featured ?? false}
-          className="size-4 rounded border-white/20 bg-transparent accent-brand-yellow"
-        />
-        Destacar na página inicial
-      </label>
+      <div className="space-y-2">
+        <label className="flex w-fit items-center gap-2 text-sm text-white">
+          <input
+            type="checkbox"
+            name="featured"
+            defaultChecked={car?.featured ?? false}
+            className="size-4 rounded border-white/20 bg-transparent accent-brand-yellow"
+          />
+          Exibir na grade "Carros em destaque" da home
+        </label>
+        <label className="flex w-fit items-center gap-2 text-sm text-white">
+          <input
+            type="checkbox"
+            name="isFlagship"
+            defaultChecked={car?.isFlagship ?? false}
+            className="size-4 rounded border-white/20 bg-transparent accent-brand-yellow"
+          />
+          Carro principal da home (carro-chefe)
+        </label>
+        <p className="text-xs text-muted-foreground">
+          Só um carro pode ser o carro-chefe por vez — marcar este
+          desmarca automaticamente o anterior.
+        </p>
+      </div>
 
       {state.error && <p className="text-sm text-brand-red">{state.error}</p>}
 

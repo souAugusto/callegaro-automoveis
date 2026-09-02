@@ -4,8 +4,10 @@ import { CarCard } from '@/components/car-card'
 import { SectionHeading } from '@/components/section-heading'
 import { getFeaturedCars } from '@/lib/data'
 
-export function FeaturedCars() {
-  const cars = getFeaturedCars()
+export function FeaturedCars({ excludeId }: { excludeId?: string } = {}) {
+  const cars = getFeaturedCars(excludeId)
+  if (cars.length === 0) return null
+
   return (
     <section className="mx-auto max-w-6xl px-4 py-16">
       <div className="flex flex-wrap items-end justify-between gap-4">
