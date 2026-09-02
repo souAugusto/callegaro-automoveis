@@ -110,7 +110,7 @@ export default async function CarDetailPage({
               Tenho interesse
             </a>
             <p className="mt-3 text-center text-xs text-muted-foreground">
-              Resposta rápida no WhatsApp {site.phoneDisplay}
+              Resposta rápida no WhatsApp {site.whatsappDisplay}
             </p>
           </div>
 

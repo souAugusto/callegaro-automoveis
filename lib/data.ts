@@ -402,6 +402,103 @@ export function getPostBySlug(slug: string): Post | undefined {
   return posts.find((p) => p.slug === slug)
 }
 
+export function getAllPosts(): Post[] {
+  return [...posts].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  )
+}
+
+export function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+/* ------------------------------------------------------------------ */
+/* CRUD mockado em memória (painel admin).                            */
+/* TODO: substituir por operações reais de banco de dados.            */
+/* ------------------------------------------------------------------ */
+
+export function getCarById(id: string): Car | undefined {
+  return cars.find((c) => c.id === id)
+}
+
+export function addCar(input: Omit<Car, 'id' | 'slug'>): Car {
+  const car: Car = {
+    ...input,
+    id: `car-${Date.now()}`,
+    slug: slugify(`${input.brand}-${input.model}-${input.version}-${input.year}`),
+  }
+  cars.unshift(car)
+  return car
+}
+
+export function updateCar(id: string, input: Omit<Car, 'id' | 'slug'>): Car | undefined {
+  const car = getCarById(id)
+  if (!car) return undefined
+  Object.assign(car, input)
+  return car
+}
+
+export function deleteCar(id: string): void {
+  const index = cars.findIndex((c) => c.id === id)
+  if (index !== -1) cars.splice(index, 1)
+}
+
+export function getPostById(id: string): Post | undefined {
+  return posts.find((p) => p.id === id)
+}
+
+export function addPost(input: Omit<Post, 'id' | 'slug'>): Post {
+  const post: Post = {
+    ...input,
+    id: `post-${Date.now()}`,
+    slug: slugify(input.title),
+  }
+  posts.unshift(post)
+  return post
+}
+
+export function updatePost(id: string, input: Omit<Post, 'id' | 'slug'>): Post | undefined {
+  const post = getPostById(id)
+  if (!post) return undefined
+  Object.assign(post, input)
+  return post
+}
+
+export function deletePost(id: string): void {
+  const index = posts.findIndex((p) => p.id === id)
+  if (index !== -1) posts.splice(index, 1)
+}
+
+export function getLeadById(id: string): Lead | undefined {
+  return leads.find((l) => l.id === id)
+}
+
+export function addLead(input: Omit<Lead, 'id' | 'createdAt' | 'status'>): Lead {
+  const lead: Lead = {
+    ...input,
+    id: `lead-${Date.now()}`,
+    status: 'Novo',
+    createdAt: new Date().toISOString(),
+  }
+  leads.unshift(lead)
+  return lead
+}
+
+export function updateLeadStatus(id: string, status: LeadStatus): void {
+  const lead = getLeadById(id)
+  if (lead) lead.status = status
+}
+
+export function deleteLead(id: string): void {
+  const index = leads.findIndex((l) => l.id === id)
+  if (index !== -1) leads.splice(index, 1)
+}
+
 export const carBrands = Array.from(new Set(cars.map((c) => c.brand))).sort()
 export const transmissions: Transmission[] = ['Manual', 'Automático']
 export const fuels: Fuel[] = ['Flex', 'Gasolina', 'Diesel']
