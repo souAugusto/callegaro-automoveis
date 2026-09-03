@@ -17,11 +17,8 @@ export default function AdminLoginPage() {
 
         <div className="rounded-2xl border border-white/10 bg-card p-6 sm:p-8">
           <h1 className="font-display text-xl font-bold uppercase tracking-wide text-white">
-            Painel administrativo
+            Acesso restrito
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Entre com suas credenciais para gerenciar carros e informações do site.
-          </p>
 
           <div className="mt-6">
             <LoginForm />

@@ -51,14 +51,6 @@ export function SiteFooter({ site }: { site: SiteConfig }) {
                 </Link>
               </li>
             ))}
-            <li>
-              <Link
-                href="/admin"
-                className="text-muted-foreground transition-colors hover:text-white"
-              >
-                Área administrativa
-              </Link>
-            </li>
           </ul>
         </div>
 
