@@ -6,10 +6,10 @@ import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { Logo } from './logo'
 import { WhatsAppIcon } from './whatsapp-icon'
-import { mainNav, SITE, whatsappLink } from '@/lib/site-config'
+import { mainNav, whatsappLink, type SiteConfig } from '@/lib/site-config'
 import { cn } from '@/lib/utils'
 
-export function SiteHeader() {
+export function SiteHeader({ site }: { site: SiteConfig }) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
 
@@ -19,7 +19,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-background/90 backdrop-blur">
       <div className="mx-auto flex h-24 max-w-6xl items-center justify-between px-4">
-        <Logo className="h-16" />
+        <Logo className="h-16" siteName={site.name} />
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Menu principal">
           {mainNav.map((item) => (
@@ -38,7 +38,7 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <a
-            href={whatsappLink(`Olá! Vim pelo site e gostaria de mais informações.`)}
+            href={whatsappLink(site, 'Olá! Vim pelo site e gostaria de mais informações.')}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden items-center gap-2 rounded-lg bg-brand-yellow px-4 py-2 font-display text-sm font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03] sm:flex"
@@ -83,7 +83,7 @@ export function SiteHeader() {
             ))}
             <li className="mt-2">
               <a
-                href={whatsappLink(`Olá! Vim pelo site e gostaria de mais informações.`)}
+                href={whatsappLink(site, 'Olá! Vim pelo site e gostaria de mais informações.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setOpen(false)}

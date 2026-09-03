@@ -7,6 +7,7 @@ import 'server-only'
 
 import { supabase } from './supabase'
 import { slugify, type Car, type CarStatus, type Fuel, type Transmission } from './data'
+import { SITE_STATIC, DEFAULT_SITE, type SiteConfig } from './site-config'
 
 /* ------------------------------------------------------------------ */
 /* Mapeamento linha do banco <-> objeto do app                        */
@@ -177,5 +178,115 @@ export async function setFlagshipCar(id: string): Promise<void> {
 
 export async function unsetFlagshipCar(id: string): Promise<void> {
   const { error } = await supabase.from('cars').update({ is_flagship: false }).eq('id', id)
+  if (error) throw error
+}
+
+/* ------------------------------------------------------------------ */
+/* Informações do site                                                 */
+/* ------------------------------------------------------------------ */
+
+interface SiteSettingsRow {
+  name: string
+  description: string
+  phone: string
+  whatsapp: string
+  email: string
+  street: string
+  neighborhood: string
+  city: string
+  state: string
+  zip: string
+  lat: number
+  lng: number
+  hours: { days: string; time: string }[]
+  instagram: string
+  facebook: string
+}
+
+function formatFullAddress(row: {
+  street: string
+  neighborhood: string
+  city: string
+  state: string
+  zip: string
+}): string {
+  const line = [row.street, row.neighborhood].filter(Boolean).join(' — ')
+  const cityState = `${row.city}/${row.state}`
+  return [line, cityState, row.zip].filter(Boolean).join(', ')
+}
+
+function mapSiteSettingsRow(row: SiteSettingsRow): SiteConfig {
+  const digits = row.phone.replace(/\D/g, '')
+  return {
+    name: row.name,
+    legalName: SITE_STATIC.legalName,
+    description: row.description,
+    url: SITE_STATIC.url,
+    phone: row.phone,
+    phoneRaw: digits ? `+55${digits}` : '',
+    whatsapp: row.whatsapp,
+    email: row.email,
+    address: {
+      street: row.street,
+      neighborhood: row.neighborhood,
+      city: row.city,
+      state: row.state,
+      zip: row.zip,
+      country: SITE_STATIC.country,
+      full: formatFullAddress(row),
+    },
+    geo: { lat: row.lat, lng: row.lng },
+    hours: row.hours ?? [],
+    social: { instagram: row.instagram, facebook: row.facebook },
+  }
+}
+
+export async function getSiteSettings(): Promise<SiteConfig> {
+  const { data } = await supabase
+    .from('site_settings')
+    .select('*')
+    .eq('id', 'default')
+    .maybeSingle()
+  return data ? mapSiteSettingsRow(data) : DEFAULT_SITE
+}
+
+export interface SiteSettingsInput {
+  name: string
+  description: string
+  phone: string
+  whatsapp: string
+  email: string
+  street: string
+  neighborhood: string
+  city: string
+  state: string
+  zip: string
+  lat: number
+  lng: number
+  hours: { days: string; time: string }[]
+  instagram: string
+  facebook: string
+}
+
+export async function saveSiteSettings(input: SiteSettingsInput): Promise<void> {
+  const { error } = await supabase.from('site_settings').upsert({
+    id: 'default',
+    name: input.name,
+    description: input.description,
+    phone: input.phone,
+    whatsapp: input.whatsapp,
+    email: input.email,
+    street: input.street,
+    neighborhood: input.neighborhood,
+    city: input.city,
+    state: input.state,
+    zip: input.zip,
+    lat: input.lat,
+    lng: input.lng,
+    hours: input.hours,
+    instagram: input.instagram,
+    facebook: input.facebook,
+    updated_at: new Date().toISOString(),
+  })
   if (error) throw error
 }

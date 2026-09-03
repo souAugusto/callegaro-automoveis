@@ -1,15 +1,18 @@
 import { MapPin, Phone, Clock, Navigation } from 'lucide-react'
 import { SectionHeading } from '@/components/section-heading'
-import { SITE, SITE_MAP_EMBED_URL, SITE_DIRECTIONS_URL } from '@/lib/site-config'
+import { getMapEmbedUrl, getDirectionsUrl } from '@/lib/site-config'
+import { getSiteSettings } from '@/lib/db'
 
-export function Location() {
+export async function Location() {
+  const site = await getSiteSettings()
+
   return (
     <section className="border-t border-white/10 bg-black">
       <div className="mx-auto max-w-6xl px-4 py-16">
         <SectionHeading
           eyebrow="Venha nos visitar"
           title="Onde estamos"
-          description={`Estamos no coração de ${SITE.address.city}. Passe para um cafezinho e conheça nosso estoque de perto.`}
+          description={`Estamos no coração de ${site.address.city}. Passe para um cafezinho e conheça nosso estoque de perto.`}
         />
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
@@ -20,9 +23,9 @@ export function Location() {
                 <p className="font-display font-bold uppercase tracking-wide text-white">
                   Endereço
                 </p>
-                <p className="text-sm text-muted-foreground">{SITE.address.full}</p>
+                <p className="text-sm text-muted-foreground">{site.address.full}</p>
                 <a
-                  href={SITE_DIRECTIONS_URL}
+                  href={getDirectionsUrl(site)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-brand-yellow hover:underline"
@@ -39,10 +42,10 @@ export function Location() {
                   Telefone
                 </p>
                 <a
-                  href={`tel:${SITE.phoneRaw}`}
+                  href={`tel:${site.phoneRaw}`}
                   className="text-sm text-muted-foreground hover:text-white"
                 >
-                  {SITE.phone}
+                  {site.phone}
                 </a>
               </div>
             </div>
@@ -53,7 +56,7 @@ export function Location() {
                   Horário de atendimento
                 </p>
                 <ul className="text-sm text-muted-foreground">
-                  {SITE.hours.map((h) => (
+                  {site.hours.map((h) => (
                     <li key={h.days}>
                       {h.days}: {h.time}
                     </li>
@@ -65,8 +68,8 @@ export function Location() {
 
           <div className="overflow-hidden rounded-2xl border border-white/10">
             <iframe
-              src={SITE_MAP_EMBED_URL}
-              title={`Mapa da localização da ${SITE.name}`}
+              src={getMapEmbedUrl(site)}
+              title={`Mapa da localização da ${site.name}`}
               className="h-full min-h-75 w-full"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

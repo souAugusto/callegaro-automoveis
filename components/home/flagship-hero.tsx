@@ -3,25 +3,28 @@ import Link from 'next/link'
 import { ArrowRight, Calendar, Gauge, Settings2 } from 'lucide-react'
 import type { Car } from '@/lib/data'
 import { formatBRL, formatKm } from '@/lib/data'
-import { SITE, whatsappLink } from '@/lib/site-config'
+import { whatsappLink } from '@/lib/site-config'
+import { getSiteSettings } from '@/lib/db'
 import { WhatsAppIcon } from '@/components/whatsapp-icon'
 import { EASE_CLASS } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
-export function FlagshipHero({ car }: { car?: Car }) {
+export async function FlagshipHero({ car }: { car?: Car }) {
+  const site = await getSiteSettings()
+
   if (!car) {
     return (
       <section className="border-b border-white/10 bg-black">
         <div className="mx-auto max-w-6xl px-4 py-20 text-center">
           <h1 className="font-display text-4xl font-bold uppercase tracking-tight text-white sm:text-5xl">
-            Seminovos com procedência em {SITE.address.city}/{SITE.address.state}
+            Seminovos com procedência em {site.address.city}/{site.address.state}
           </h1>
           <p className="mt-4 text-muted-foreground">
             Nosso estoque está sendo atualizado. Fale com a gente pelo
             WhatsApp e conheça as novidades.
           </p>
           <a
-            href={whatsappLink('Olá! Vim pelo site e gostaria de mais informações.')}
+            href={whatsappLink(site, 'Olá! Vim pelo site e gostaria de mais informações.')}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-7 py-4 font-display text-base font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03]"
@@ -72,9 +75,10 @@ export function FlagshipHero({ car }: { car?: Car }) {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a
               href={whatsappLink(
+                site,
                 `Olá! Tenho interesse no ${fullName} ${car.year} (${formatBRL(
                   car.price,
-                )}) anunciado na ${SITE.name}. Ainda está disponível?`,
+                )}) anunciado na ${site.name}. Ainda está disponível?`,
               )}
               target="_blank"
               rel="noopener noreferrer"

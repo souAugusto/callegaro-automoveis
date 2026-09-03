@@ -10,9 +10,9 @@ import {
   DoorOpen,
   Palette,
 } from 'lucide-react'
-import { getAllCars, getCarBySlug } from '@/lib/db'
+import { getAllCars, getCarBySlug, getSiteSettings } from '@/lib/db'
 import { formatBRL, formatKm } from '@/lib/data'
-import { SITE, whatsappLink } from '@/lib/site-config'
+import { whatsappLink } from '@/lib/site-config'
 import { CarGallery } from '@/components/estoque/car-gallery'
 import { WhatsAppIcon } from '@/components/whatsapp-icon'
 import { Badge } from '@/components/ui/badge'
@@ -45,7 +45,7 @@ export default async function CarDetailPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const car = await getCarBySlug(slug)
+  const [car, site] = await Promise.all([getCarBySlug(slug), getSiteSettings()])
   if (!car) notFound()
 
   const fullName = `${car.brand} ${car.model} ${car.version}`
@@ -103,9 +103,10 @@ export default async function CarDetailPage({
 
             <a
               href={whatsappLink(
+                site,
                 `Olá! Tenho interesse no ${fullName} ${car.year} (${formatBRL(
                   car.price,
-                )}) anunciado na ${SITE.name}. Ainda está disponível?`,
+                )}) anunciado na ${site.name}. Ainda está disponível?`,
               )}
               target="_blank"
               rel="noopener noreferrer"
@@ -115,7 +116,7 @@ export default async function CarDetailPage({
               Tenho interesse
             </a>
             <p className="mt-3 text-center text-xs text-muted-foreground">
-              Resposta rápida no WhatsApp {SITE.phone}
+              Resposta rápida no WhatsApp {site.phone}
             </p>
           </div>
 

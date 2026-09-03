@@ -3,6 +3,7 @@ import { CheckCircle2, Zap, Wallet, Repeat } from 'lucide-react'
 import { WhatsAppIcon } from '@/components/whatsapp-icon'
 import { ScrollReveal } from '@/components/scroll-reveal'
 import { whatsappLink } from '@/lib/site-config'
+import { getSiteSettings } from '@/lib/db'
 
 const bullets = [
   {
@@ -22,7 +23,9 @@ const bullets = [
   },
 ]
 
-export function Financing() {
+export async function Financing() {
+  const site = await getSiteSettings()
+
   return (
     <section className="border-y border-white/10 bg-black">
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 lg:grid-cols-2">
@@ -68,7 +71,7 @@ export function Financing() {
           </ul>
 
           <a
-            href={whatsappLink('Olá! Quero simular um financiamento.')}
+            href={whatsappLink(site, 'Olá! Quero simular um financiamento.')}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-7 py-4 font-display text-base font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03]"

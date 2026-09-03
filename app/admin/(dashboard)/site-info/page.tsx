@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
+import { getSiteSettings } from '@/lib/db'
 import { SiteInfoForm } from '@/components/admin/site-info-form'
 
 export const metadata: Metadata = { title: 'Informações do Site' }
 
-export default function SiteInfoPage() {
+export default async function SiteInfoPage() {
+  const site = await getSiteSettings()
+
   return (
     <div>
       <h1 className="font-display text-2xl font-bold uppercase tracking-tight text-white">
@@ -14,7 +17,7 @@ export default function SiteInfoPage() {
       </p>
 
       <div className="mt-6 max-w-2xl rounded-2xl border border-white/10 bg-card p-6">
-        <SiteInfoForm />
+        <SiteInfoForm initial={site} />
       </div>
     </div>
   )

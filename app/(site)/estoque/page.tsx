@@ -1,14 +1,16 @@
 import type { Metadata } from 'next'
-import { getAllCars } from '@/lib/db'
-import { SITE } from '@/lib/site-config'
+import { getAllCars, getSiteSettings } from '@/lib/db'
 import { EstoqueBrowser } from '@/components/estoque/estoque-browser'
 
-export const metadata: Metadata = {
-  title: 'Estoque de Carros Usados em Parobé',
-  description: `Confira o estoque de carros usados e seminovos da ${SITE.name} em Parobé, RS. Filtre por marca, preço e câmbio.`,
-  alternates: {
-    canonical: '/estoque',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getSiteSettings()
+  return {
+    title: 'Estoque de Carros Usados em Parobé',
+    description: `Confira o estoque de carros usados e seminovos da ${site.name} em Parobé, RS. Filtre por marca, preço e câmbio.`,
+    alternates: {
+      canonical: '/estoque',
+    },
+  }
 }
 
 export default async function EstoquePage() {

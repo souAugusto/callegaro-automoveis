@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { SITE } from '@/lib/site-config'
+import { SITE_STATIC } from '@/lib/site-config'
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/admin',
     },
-    sitemap: `${SITE.url}/sitemap.xml`,
+    sitemap: `${SITE_STATIC.url}/sitemap.xml`,
   }
 }

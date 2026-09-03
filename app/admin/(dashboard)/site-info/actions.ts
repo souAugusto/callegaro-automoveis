@@ -1,6 +1,7 @@
 'use server'
 
-import { saveSiteInfo, type SiteInfoInput } from '@/lib/save-site-info'
+import { revalidatePath } from 'next/cache'
+import { saveSiteSettings, type SiteSettingsInput } from '@/lib/db'
 
 export interface SiteInfoFormState {
   error?: string
@@ -47,7 +48,7 @@ export async function saveSiteInfoAction(
     return { error: 'Latitude e longitude precisam ser números válidos.' }
   }
 
-  const input: SiteInfoInput = {
+  const input: SiteSettingsInput = {
     name,
     description,
     phone,
@@ -66,10 +67,15 @@ export async function saveSiteInfoAction(
   }
 
   try {
-    await saveSiteInfo(input)
+    await saveSiteSettings(input)
   } catch {
     return { error: 'Não foi possível salvar. Tente novamente.' }
   }
+
+  revalidatePath('/', 'layout')
+  revalidatePath('/estoque')
+  revalidatePath('/contato')
+  revalidatePath('/admin/site-info')
 
   return { success: true }
 }

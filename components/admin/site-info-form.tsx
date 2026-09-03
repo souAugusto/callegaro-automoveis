@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from 'react'
 import { Save, CheckCircle2, Plus, X } from 'lucide-react'
-import { SITE } from '@/lib/site-config'
+import type { SiteConfig } from '@/lib/site-config'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -14,13 +14,13 @@ import {
 
 const initialState: SiteInfoFormState = {}
 
-export function SiteInfoForm() {
+export function SiteInfoForm({ initial }: { initial: SiteConfig }) {
   const [state, formAction, pending] = useActionState(
     saveSiteInfoAction,
     initialState,
   )
   const [hours, setHours] = useState<{ days: string; time: string }[]>(
-    SITE.hours.map((h) => ({ days: h.days, time: h.time })),
+    initial.hours.map((h) => ({ days: h.days, time: h.time })),
   )
 
   function addHourRow() {
@@ -46,7 +46,7 @@ export function SiteInfoForm() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2 sm:col-span-2">
             <Label htmlFor="name">Nome do negócio*</Label>
-            <Input id="name" name="name" defaultValue={SITE.name} required />
+            <Input id="name" name="name" defaultValue={initial.name} required />
           </div>
           <div className="space-y-2 sm:col-span-2">
             <Label htmlFor="description">Descrição curta*</Label>
@@ -54,7 +54,7 @@ export function SiteInfoForm() {
               id="description"
               name="description"
               rows={3}
-              defaultValue={SITE.description}
+              defaultValue={initial.description}
               required
             />
             <p className="text-xs text-muted-foreground">
@@ -71,14 +71,14 @@ export function SiteInfoForm() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="phone">Telefone*</Label>
-            <Input id="phone" name="phone" defaultValue={SITE.phone} required />
+            <Input id="phone" name="phone" defaultValue={initial.phone} required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="whatsapp">WhatsApp*</Label>
             <Input
               id="whatsapp"
               name="whatsapp"
-              defaultValue={SITE.whatsapp}
+              defaultValue={initial.whatsapp}
               required
             />
           </div>
@@ -88,7 +88,7 @@ export function SiteInfoForm() {
               id="email"
               name="email"
               type="email"
-              defaultValue={SITE.email}
+              defaultValue={initial.email}
               required
             />
           </div>
@@ -102,27 +102,27 @@ export function SiteInfoForm() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2 sm:col-span-2">
             <Label htmlFor="street">Rua e número*</Label>
-            <Input id="street" name="street" defaultValue={SITE.address.street} required />
+            <Input id="street" name="street" defaultValue={initial.address.street} required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="neighborhood">Bairro</Label>
             <Input
               id="neighborhood"
               name="neighborhood"
-              defaultValue={SITE.address.neighborhood}
+              defaultValue={initial.address.neighborhood}
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="zip">CEP</Label>
-            <Input id="zip" name="zip" defaultValue={SITE.address.zip} />
+            <Input id="zip" name="zip" defaultValue={initial.address.zip} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="city">Cidade*</Label>
-            <Input id="city" name="city" defaultValue={SITE.address.city} required />
+            <Input id="city" name="city" defaultValue={initial.address.city} required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="state">Estado*</Label>
-            <Input id="state" name="state" defaultValue={SITE.address.state} required />
+            <Input id="state" name="state" defaultValue={initial.address.state} required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="lat">Latitude*</Label>
@@ -131,7 +131,7 @@ export function SiteInfoForm() {
               name="lat"
               type="number"
               step="any"
-              defaultValue={SITE.geo.lat}
+              defaultValue={initial.geo.lat}
               required
             />
           </div>
@@ -142,7 +142,7 @@ export function SiteInfoForm() {
               name="lng"
               type="number"
               step="any"
-              defaultValue={SITE.geo.lng}
+              defaultValue={initial.geo.lng}
               required
             />
           </div>
@@ -215,11 +215,11 @@ export function SiteInfoForm() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="instagram">Instagram</Label>
-            <Input id="instagram" name="instagram" defaultValue={SITE.social.instagram} />
+            <Input id="instagram" name="instagram" defaultValue={initial.social.instagram} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="facebook">Facebook</Label>
-            <Input id="facebook" name="facebook" defaultValue={SITE.social.facebook} />
+            <Input id="facebook" name="facebook" defaultValue={initial.social.facebook} />
           </div>
         </div>
       </section>

@@ -1,13 +1,44 @@
-// Configuração central da loja. Todo o resto do site importa daqui —
-// não repita telefone, endereço, e-mail ou redes sociais soltos em outros
-// arquivos.
+// Tipo e valores padrão dos dados do negócio. Os dados de verdade agora
+// vêm do banco (tabela site_settings, editável em /admin/site-info — ver
+// getSiteSettings() em lib/db.ts). Este arquivo só define o formato e o
+// fallback usado enquanto a tabela estiver vazia.
 
-export const SITE = {
-  name: 'Callegaro Automóveis',
+export interface SiteConfig {
+  name: string
+  legalName: string
+  description: string
+  url: string
+  phone: string
+  phoneRaw: string
+  whatsapp: string
+  email: string
+  address: {
+    street: string
+    neighborhood: string
+    city: string
+    state: string
+    zip: string
+    country: string
+    full: string
+  }
+  geo: { lat: number; lng: number }
+  hours: { days: string; time: string }[]
+  social: { instagram: string; facebook: string }
+}
+
+/** Campos técnicos que não são editáveis pelo formulário do admin. */
+export const SITE_STATIC = {
   legalName: 'Callegaro Comércio de Veículos Ltda',
+  url: 'https://www.callegaroautomoveis.site',
+  country: 'BR',
+} as const
+
+export const DEFAULT_SITE: SiteConfig = {
+  name: 'Callegaro Automóveis',
+  legalName: SITE_STATIC.legalName,
   description:
     'Revenda de carros usados e seminovos em Parobé, RS. Financiamento, troca com entrada e atendimento de confiança.',
-  url: 'https://www.callegaroautomoveis.site',
+  url: SITE_STATIC.url,
 
   phone: '(51) 99675-9522',
   phoneRaw: '+5551996759522',
@@ -20,7 +51,7 @@ export const SITE = {
     city: 'Parobé',
     state: 'RS',
     zip: '95630-000',
-    country: 'BR',
+    country: SITE_STATIC.country,
     full: 'Av. Taquara, 2659 — Vila Nova, Parobé/RS, 95630-000',
   },
 
@@ -39,19 +70,23 @@ export const SITE = {
     instagram: 'https://www.instagram.com/callegaroautomoveis3/',
     facebook: 'https://www.facebook.com/p/Callegaro-automóveis-100066760371070/',
   },
-} as const
+}
 
 /** Monta um link do WhatsApp com mensagem pré-preenchida. */
-export function whatsappLink(message?: string): string {
-  if (!message) return SITE.whatsapp
-  return `${SITE.whatsapp}?text=${encodeURIComponent(message)}`
+export function whatsappLink(site: Pick<SiteConfig, 'whatsapp'>, message?: string): string {
+  if (!message) return site.whatsapp
+  return `${site.whatsapp}?text=${encodeURIComponent(message)}`
 }
 
 /** Embed do Google Maps centrado nas coordenadas da loja. */
-export const SITE_MAP_EMBED_URL = `https://www.google.com/maps?q=${SITE.geo.lat},${SITE.geo.lng}&z=16&output=embed`
+export function getMapEmbedUrl(site: Pick<SiteConfig, 'geo'>): string {
+  return `https://www.google.com/maps?q=${site.geo.lat},${site.geo.lng}&z=16&output=embed`
+}
 
 /** Link "Como chegar" — abre a rota até a loja no Google Maps. */
-export const SITE_DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${SITE.geo.lat},${SITE.geo.lng}`
+export function getDirectionsUrl(site: Pick<SiteConfig, 'geo'>): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${site.geo.lat},${site.geo.lng}`
+}
 
 export const mainNav = [
   { label: 'Início', href: '/' },
