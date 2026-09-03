@@ -14,7 +14,7 @@ export default async function EditarCarroPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const car = getCarById(id)
+  const car = await getCarById(id)
   if (!car) notFound()
 
   const action = updateCarAction.bind(null, id)

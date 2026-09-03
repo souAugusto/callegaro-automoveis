@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import { Car, Users, TrendingUp } from 'lucide-react'
-import { cars, leads, formatBRL, formatDate } from '@/lib/data'
+import { getAllCars, getAllLeads, formatBRL, formatDate } from '@/lib/data'
 import { Badge } from '@/components/ui/badge'
 import { leadStatusStyles } from '@/components/admin/lead-status-styles'
 
-export default function AdminDashboardPage() {
+export default async function AdminDashboardPage() {
+  const [cars, leads] = await Promise.all([getAllCars(), getAllLeads()])
   const availableCars = cars.filter((c) => c.status === 'Disponível').length
   const newLeads = leads.filter((l) => l.status === 'Novo').length
   const inventoryValue = cars

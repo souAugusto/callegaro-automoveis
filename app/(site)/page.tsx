@@ -5,8 +5,8 @@ import { Financing } from '@/components/home/financing'
 import { Location } from '@/components/home/location'
 import { getFlagshipCar } from '@/lib/data'
 
-export default function HomePage() {
-  const flagshipCar = getFlagshipCar()
+export default async function HomePage() {
+  const flagshipCar = await getFlagshipCar()
 
   return (
     <>

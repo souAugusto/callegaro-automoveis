@@ -5,8 +5,8 @@ import { SectionHeading } from '@/components/section-heading'
 import { ScrollReveal } from '@/components/scroll-reveal'
 import { getFeaturedCars } from '@/lib/data'
 
-export function FeaturedCars({ excludeId }: { excludeId?: string } = {}) {
-  const cars = getFeaturedCars(excludeId)
+export async function FeaturedCars({ excludeId }: { excludeId?: string } = {}) {
+  const cars = await getFeaturedCars(excludeId)
   if (cars.length === 0) return null
 
   return (

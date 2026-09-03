@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { leads, formatDate } from '@/lib/data'
+import { getAllLeads, formatDate } from '@/lib/data'
 import {
   Table,
   TableBody,
@@ -14,10 +14,8 @@ import { removeLead } from './actions'
 
 export const metadata: Metadata = { title: 'Leads' }
 
-export default function AdminLeadsPage() {
-  const sorted = [...leads].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  )
+export default async function AdminLeadsPage() {
+  const sorted = await getAllLeads()
 
   return (
     <div>

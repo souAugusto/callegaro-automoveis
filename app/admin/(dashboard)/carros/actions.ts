@@ -7,6 +7,7 @@ import {
   updateCar,
   deleteCar,
   setFlagshipCar,
+  unsetFlagshipCar,
   type Car,
   type CarStatus,
   type Transmission,
@@ -70,10 +71,12 @@ export async function createCarAction(
   const input = parseCarInput(formData)
   if ('error' in input) return input
 
-  const car = addCar(input)
-  if (input.isFlagship) setFlagshipCar(car.id)
+  const car = await addCar(input)
+  if (input.isFlagship) await setFlagshipCar(car.id)
   revalidatePath('/admin/carros')
+  revalidatePath('/admin')
   revalidatePath('/estoque')
+  revalidatePath(`/estoque/${car.slug}`)
   revalidatePath('/')
   redirect('/admin/carros')
 }
@@ -86,17 +89,25 @@ export async function updateCarAction(
   const input = parseCarInput(formData)
   if ('error' in input) return input
 
-  const car = updateCar(id, input)
-  if (car && input.isFlagship) setFlagshipCar(car.id)
+  const car = await updateCar(id, input)
+  if (car) {
+    if (input.isFlagship) {
+      await setFlagshipCar(car.id)
+    } else {
+      await unsetFlagshipCar(car.id)
+    }
+  }
   revalidatePath('/admin/carros')
+  revalidatePath('/admin')
   revalidatePath('/estoque')
+  if (car) revalidatePath(`/estoque/${car.slug}`)
   revalidatePath('/')
   redirect('/admin/carros')
 }
 
 export async function removeCar(formData: FormData) {
   const id = String(formData.get('id') || '')
-  deleteCar(id)
+  await deleteCar(id)
   revalidatePath('/admin/carros')
   revalidatePath('/estoque')
   revalidatePath('/admin')

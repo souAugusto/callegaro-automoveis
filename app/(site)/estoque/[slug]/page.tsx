@@ -10,13 +10,14 @@ import {
   DoorOpen,
   Palette,
 } from 'lucide-react'
-import { cars, getCarBySlug, formatBRL, formatKm } from '@/lib/data'
+import { getAllCars, getCarBySlug, formatBRL, formatKm } from '@/lib/data'
 import { site, whatsappLink } from '@/lib/site'
 import { CarGallery } from '@/components/estoque/car-gallery'
 import { WhatsAppIcon } from '@/components/whatsapp-icon'
 import { Badge } from '@/components/ui/badge'
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const cars = await getAllCars()
   return cars.map((car) => ({ slug: car.slug }))
 }
 
@@ -26,7 +27,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const car = getCarBySlug(slug)
+  const car = await getCarBySlug(slug)
   if (!car) return { title: 'Veículo não encontrado' }
   return {
     title: `${car.brand} ${car.model} ${car.year}`,
@@ -40,7 +41,7 @@ export default async function CarDetailPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const car = getCarBySlug(slug)
+  const car = await getCarBySlug(slug)
   if (!car) notFound()
 
   const fullName = `${car.brand} ${car.model} ${car.version}`

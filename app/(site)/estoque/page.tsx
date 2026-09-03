@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { cars } from '@/lib/data'
+import { getAllCars } from '@/lib/data'
 import { SITE_NAME } from '@/lib/site'
 import { EstoqueBrowser } from '@/components/estoque/estoque-browser'
 
@@ -8,7 +8,9 @@ export const metadata: Metadata = {
   description: `Confira o estoque de carros populares e seminovos da ${SITE_NAME}. Filtre por marca, preço e câmbio.`,
 }
 
-export default function EstoquePage() {
+export default async function EstoquePage() {
+  const cars = await getAllCars()
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
       <header className="mb-10">

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Plus, Pencil } from 'lucide-react'
-import { cars, formatBRL, formatKm } from '@/lib/data'
+import { getAllCars, formatBRL, formatKm } from '@/lib/data'
 import {
   Table,
   TableBody,
@@ -24,7 +24,9 @@ const statusStyles: Record<string, string> = {
   Vendido: 'bg-brand-red text-white',
 }
 
-export default function AdminCarrosPage() {
+export default async function AdminCarrosPage() {
+  const cars = await getAllCars()
+
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">

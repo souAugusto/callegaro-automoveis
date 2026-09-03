@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { addLead } from '@/lib/data'
 
 export interface ContactFormState {
@@ -20,12 +21,15 @@ export async function submitContactForm(
     return { success: false, error: 'Preencha seu nome e telefone para continuar.' }
   }
 
-  addLead({
+  await addLead({
     name,
     phone,
     origin: 'Formulário do site',
     carInterest: carInterest || message || 'Não informado',
   })
+
+  revalidatePath('/admin/leads')
+  revalidatePath('/admin')
 
   return { success: true }
 }
