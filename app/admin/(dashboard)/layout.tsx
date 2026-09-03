@@ -12,6 +12,12 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
+// Painel autenticado: nunca deve ser servido de um cache estático. Sem isso,
+// o Next.js pode reaproveitar a resposta de redirect de uma Server Action
+// (ex: depois de criar um carro) como se fosse o cache da página estática,
+// devolvendo esse redirect antigo pra requisições futuras.
+export const dynamic = 'force-dynamic'
+
 async function logoutAction() {
   'use server'
   await destroySession()

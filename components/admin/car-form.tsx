@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { ImageUploadField } from '@/components/admin/image-upload-field'
 import type { CarFormState } from '@/app/admin/(dashboard)/carros/actions'
 
 export function CarForm({
@@ -142,16 +143,8 @@ export function CarForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="images">
-          Fotos (uma URL por linha, ex: /cars/vw-gol.png)
-        </Label>
-        <Textarea
-          id="images"
-          name="images"
-          rows={3}
-          defaultValue={car?.images.join('\n')}
-          placeholder="/cars/vw-gol.png"
-        />
+        <Label>Fotos</Label>
+        <ImageUploadField existingImages={car?.images} />
       </div>
 
       <div className="space-y-2">

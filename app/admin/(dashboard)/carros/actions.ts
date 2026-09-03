@@ -2,14 +2,24 @@
 
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { addCar, updateCar, deleteCar, setFlagshipCar, unsetFlagshipCar } from '@/lib/db'
+import {
+  addCar,
+  updateCar,
+  deleteCar,
+  getCarById,
+  setFlagshipCar,
+  unsetFlagshipCar,
+} from '@/lib/db'
+import { uploadCarImage, deleteCarImage } from '@/lib/storage'
 import type { Car, CarStatus, Transmission, Fuel } from '@/lib/data'
 
 export interface CarFormState {
   error?: string
 }
 
-function parseCarInput(formData: FormData): Omit<Car, 'id' | 'slug'> | { error: string } {
+async function parseCarInput(
+  formData: FormData,
+): Promise<Omit<Car, 'id' | 'slug'> | { error: string }> {
   const brand = String(formData.get('brand') || '').trim()
   const model = String(formData.get('model') || '').trim()
   const version = String(formData.get('version') || '').trim()
@@ -24,10 +34,6 @@ function parseCarInput(formData: FormData): Omit<Car, 'id' | 'slug'> | { error: 
   const featured = formData.get('featured') === 'on'
   const isFlagship = formData.get('isFlagship') === 'on'
   const description = String(formData.get('description') || '').trim()
-  const images = String(formData.get('images') || '')
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean)
 
   if (!brand || !model || !version || !color || !description) {
     return { error: 'Preencha todos os campos obrigatórios.' }
@@ -35,6 +41,24 @@ function parseCarInput(formData: FormData): Omit<Car, 'id' | 'slug'> | { error: 
   if (!year || !km || !doors || !price) {
     return { error: 'Ano, km, portas e preço precisam ser números válidos.' }
   }
+
+  const existingImages = formData
+    .getAll('existingImages')
+    .map((v) => String(v))
+    .filter(Boolean)
+
+  const newFiles = formData
+    .getAll('newImages')
+    .filter((v): v is File => v instanceof File && v.size > 0)
+
+  let uploadedImages: string[]
+  try {
+    uploadedImages = await Promise.all(newFiles.map((file) => uploadCarImage(file)))
+  } catch {
+    return { error: 'Não foi possível enviar uma ou mais fotos. Tente novamente.' }
+  }
+
+  const images = [...existingImages, ...uploadedImages]
 
   return {
     brand,
@@ -59,7 +83,7 @@ export async function createCarAction(
   _prevState: CarFormState,
   formData: FormData,
 ): Promise<CarFormState> {
-  const input = parseCarInput(formData)
+  const input = await parseCarInput(formData)
   if ('error' in input) return input
 
   const car = await addCar(input)
@@ -77,7 +101,8 @@ export async function updateCarAction(
   _prevState: CarFormState,
   formData: FormData,
 ): Promise<CarFormState> {
-  const input = parseCarInput(formData)
+  const previous = await getCarById(id)
+  const input = await parseCarInput(formData)
   if ('error' in input) return input
 
   const car = await updateCar(id, input)
@@ -87,7 +112,13 @@ export async function updateCarAction(
     } else {
       await unsetFlagshipCar(car.id)
     }
+
+    const removedImages = (previous?.images ?? []).filter(
+      (url) => !input.images.includes(url),
+    )
+    await Promise.all(removedImages.map((url) => deleteCarImage(url)))
   }
+
   revalidatePath('/admin/carros')
   revalidatePath('/admin')
   revalidatePath('/estoque')
@@ -98,7 +129,9 @@ export async function updateCarAction(
 
 export async function removeCar(formData: FormData) {
   const id = String(formData.get('id') || '')
+  const car = await getCarById(id)
   await deleteCar(id)
+  if (car) await Promise.all(car.images.map((url) => deleteCarImage(url)))
   revalidatePath('/admin/carros')
   revalidatePath('/estoque')
   revalidatePath('/admin')
