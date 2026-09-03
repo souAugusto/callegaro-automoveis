@@ -6,15 +6,7 @@
 import 'server-only'
 
 import { supabase } from './supabase'
-import {
-  slugify,
-  type Car,
-  type CarStatus,
-  type Fuel,
-  type Lead,
-  type LeadStatus,
-  type Transmission,
-} from './data'
+import { slugify, type Car, type CarStatus, type Fuel, type Transmission } from './data'
 
 /* ------------------------------------------------------------------ */
 /* Mapeamento linha do banco <-> objeto do app                        */
@@ -40,16 +32,6 @@ interface CarRow {
   description: string
 }
 
-interface LeadRow {
-  id: string
-  name: string
-  phone: string
-  origin: string
-  car_interest: string
-  status: LeadStatus
-  created_at: string
-}
-
 function mapCarRow(row: CarRow): Car {
   return {
     id: row.id,
@@ -69,18 +51,6 @@ function mapCarRow(row: CarRow): Car {
     featured: row.featured,
     isFlagship: row.is_flagship,
     description: row.description,
-  }
-}
-
-function mapLeadRow(row: LeadRow): Lead {
-  return {
-    id: row.id,
-    name: row.name,
-    phone: row.phone,
-    origin: row.origin,
-    carInterest: row.car_interest,
-    status: row.status,
-    createdAt: row.created_at,
   }
 }
 
@@ -207,50 +177,5 @@ export async function setFlagshipCar(id: string): Promise<void> {
 
 export async function unsetFlagshipCar(id: string): Promise<void> {
   const { error } = await supabase.from('cars').update({ is_flagship: false }).eq('id', id)
-  if (error) throw error
-}
-
-/* ------------------------------------------------------------------ */
-/* Leads                                                               */
-/* ------------------------------------------------------------------ */
-
-export async function getAllLeads(): Promise<Lead[]> {
-  const { data, error } = await supabase
-    .from('leads')
-    .select('*')
-    .order('created_at', { ascending: false })
-  if (error) throw error
-  return (data ?? []).map(mapLeadRow)
-}
-
-export async function getLeadById(id: string): Promise<Lead | undefined> {
-  const { data } = await supabase.from('leads').select('*').eq('id', id).maybeSingle()
-  return data ? mapLeadRow(data) : undefined
-}
-
-export async function addLead(
-  input: Omit<Lead, 'id' | 'createdAt' | 'status'>,
-): Promise<Lead> {
-  const { data, error } = await supabase
-    .from('leads')
-    .insert({
-      name: input.name,
-      phone: input.phone,
-      origin: input.origin,
-      car_interest: input.carInterest,
-    })
-    .select()
-    .single()
-  if (error) throw error
-  return mapLeadRow(data)
-}
-
-export async function updateLeadStatus(id: string, status: LeadStatus): Promise<void> {
-  const { error } = await supabase.from('leads').update({ status }).eq('id', id)
-  if (error) throw error
-}
-
-export async function deleteLead(id: string): Promise<void> {
-  const { error } = await supabase.from('leads').delete().eq('id', id)
   if (error) throw error
 }

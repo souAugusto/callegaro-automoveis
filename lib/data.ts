@@ -29,18 +29,6 @@ export interface Car {
   description: string
 }
 
-export type LeadStatus = 'Novo' | 'Em contato' | 'Negociando' | 'Vendido' | 'Perdido'
-
-export interface Lead {
-  id: string
-  name: string
-  phone: string
-  origin: string
-  carInterest: string
-  status: LeadStatus
-  createdAt: string // ISO
-}
-
 export function formatBRL(value: number): string {
   return value.toLocaleString('pt-BR', {
     style: 'currency',
@@ -51,14 +39,6 @@ export function formatBRL(value: number): string {
 
 export function formatKm(km: number): string {
   return `${km.toLocaleString('pt-BR')} km`
-}
-
-export function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  })
 }
 
 export function slugify(text: string): string {
@@ -72,11 +52,4 @@ export function slugify(text: string): string {
 
 export const transmissions: Transmission[] = ['Manual', 'Automático']
 export const fuels: Fuel[] = ['Flex', 'Gasolina', 'Diesel']
-export const leadStatuses: LeadStatus[] = [
-  'Novo',
-  'Em contato',
-  'Negociando',
-  'Vendido',
-  'Perdido',
-]
 export const carStatuses: CarStatus[] = ['Disponível', 'Reservado', 'Vendido']

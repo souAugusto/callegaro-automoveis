@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { MapPin, Phone, Clock } from 'lucide-react'
-import { InstagramIcon, FacebookIcon, YoutubeIcon } from './social-icons'
+import { InstagramIcon, FacebookIcon } from './social-icons'
 import { Logo } from './logo'
-import { mainNav, site } from '@/lib/site'
+import { mainNav, SITE } from '@/lib/site-config'
 
 export function SiteFooter() {
   return (
@@ -12,11 +12,11 @@ export function SiteFooter() {
           <Logo />
           <p className="text-sm leading-relaxed text-muted-foreground">
             Carros populares e seminovos com procedência, negociação justa e
-            financiamento facilitado em {site.city}/{site.state}.
+            financiamento facilitado em {SITE.address.city}/{SITE.address.state}.
           </p>
           <div className="flex gap-3">
             <a
-              href={site.social.instagram}
+              href={SITE.social.instagram}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
@@ -25,22 +25,13 @@ export function SiteFooter() {
               <InstagramIcon className="size-5" />
             </a>
             <a
-              href={site.social.facebook}
+              href={SITE.social.facebook}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
               className="flex size-10 items-center justify-center rounded-lg border border-white/15 text-white transition-colors hover:bg-brand-yellow hover:text-black"
             >
               <FacebookIcon className="size-5" />
-            </a>
-            <a
-              href={site.social.youtube}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="YouTube"
-              className="flex size-10 items-center justify-center rounded-lg border border-white/15 text-white transition-colors hover:bg-brand-yellow hover:text-black"
-            >
-              <YoutubeIcon className="size-5" />
             </a>
           </div>
         </div>
@@ -78,12 +69,12 @@ export function SiteFooter() {
           <ul className="space-y-3 text-sm text-muted-foreground">
             <li className="flex items-start gap-2">
               <MapPin className="mt-0.5 size-4 shrink-0 text-brand-yellow" />
-              <span>{site.address}</span>
+              <span>{SITE.address.full}</span>
             </li>
             <li className="flex items-center gap-2">
               <Phone className="size-4 shrink-0 text-brand-yellow" />
-              <a href={`tel:${site.phone}`} className="hover:text-white">
-                {site.phone}
+              <a href={`tel:${SITE.phoneRaw}`} className="hover:text-white">
+                {SITE.phone}
               </a>
             </li>
           </ul>
@@ -94,12 +85,12 @@ export function SiteFooter() {
             Horário
           </h3>
           <ul className="space-y-3 text-sm text-muted-foreground">
-            {site.hours.map((h) => (
-              <li key={h.label} className="flex items-start gap-2">
+            {SITE.hours.map((h) => (
+              <li key={h.days} className="flex items-start gap-2">
                 <Clock className="mt-0.5 size-4 shrink-0 text-brand-yellow" />
                 <span>
-                  <span className="block text-white">{h.label}</span>
-                  {h.value}
+                  <span className="block text-white">{h.days}</span>
+                  {h.time}
                 </span>
               </li>
             ))}
@@ -109,8 +100,8 @@ export function SiteFooter() {
 
       <div className="border-t border-white/10 py-6">
         <p className="px-4 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} {site.name}. Todos os direitos reservados.
-          CNPJ fictício apenas para demonstração.
+          © {new Date().getFullYear()} {SITE.name}. Todos os direitos
+          reservados.
         </p>
       </div>
     </footer>

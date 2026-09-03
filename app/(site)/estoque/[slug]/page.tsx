@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { getAllCars, getCarBySlug } from '@/lib/db'
 import { formatBRL, formatKm } from '@/lib/data'
-import { site, whatsappLink } from '@/lib/site'
+import { SITE, whatsappLink } from '@/lib/site-config'
 import { CarGallery } from '@/components/estoque/car-gallery'
 import { WhatsAppIcon } from '@/components/whatsapp-icon'
 import { Badge } from '@/components/ui/badge'
@@ -33,6 +33,9 @@ export async function generateMetadata({
   return {
     title: `${car.brand} ${car.model} ${car.year}`,
     description: car.description,
+    alternates: {
+      canonical: `/estoque/${car.slug}`,
+    },
   }
 }
 
@@ -102,7 +105,7 @@ export default async function CarDetailPage({
               href={whatsappLink(
                 `Olá! Tenho interesse no ${fullName} ${car.year} (${formatBRL(
                   car.price,
-                )}) anunciado na ${site.name}. Ainda está disponível?`,
+                )}) anunciado na ${SITE.name}. Ainda está disponível?`,
               )}
               target="_blank"
               rel="noopener noreferrer"
@@ -112,7 +115,7 @@ export default async function CarDetailPage({
               Tenho interesse
             </a>
             <p className="mt-3 text-center text-xs text-muted-foreground">
-              Resposta rápida no WhatsApp {site.whatsappDisplay}
+              Resposta rápida no WhatsApp {SITE.phone}
             </p>
           </div>
 

@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard,
-  Users,
   Car,
+  Settings,
   ExternalLink,
   LogOut,
 } from 'lucide-react'
@@ -14,8 +14,8 @@ import { cn } from '@/lib/utils'
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/admin/leads', label: 'Leads', icon: Users },
   { href: '/admin/carros', label: 'Carros', icon: Car },
+  { href: '/admin/site-info', label: 'Informações do Site', icon: Settings },
 ]
 
 export function AdminSidebar({ logoutAction }: { logoutAction: () => void }) {

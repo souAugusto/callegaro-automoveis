@@ -1,10 +1,8 @@
-import { site, whatsappLink } from '@/lib/site'
+import { whatsappLink } from '@/lib/site-config'
 import { WhatsAppIcon } from './whatsapp-icon'
 
 export function WhatsAppFloat() {
-  const href = whatsappLink(
-    `Olá! Vim pelo site da ${site.name} e gostaria de mais informações.`,
-  )
+  const href = whatsappLink('Olá! Vim pelo site e gostaria de mais informações.')
   return (
     <a
       href={href}

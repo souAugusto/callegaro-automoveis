@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { ArrowRight, Calendar, Gauge, Settings2 } from 'lucide-react'
 import type { Car } from '@/lib/data'
 import { formatBRL, formatKm } from '@/lib/data'
-import { site, whatsappLink } from '@/lib/site'
+import { SITE, whatsappLink } from '@/lib/site-config'
 import { WhatsAppIcon } from '@/components/whatsapp-icon'
 import { EASE_CLASS } from '@/lib/motion'
 import { cn } from '@/lib/utils'
@@ -14,14 +14,14 @@ export function FlagshipHero({ car }: { car?: Car }) {
       <section className="border-b border-white/10 bg-black">
         <div className="mx-auto max-w-6xl px-4 py-20 text-center">
           <h1 className="font-display text-4xl font-bold uppercase tracking-tight text-white sm:text-5xl">
-            Seminovos com procedência em {site.city}/{site.state}
+            Seminovos com procedência em {SITE.address.city}/{SITE.address.state}
           </h1>
           <p className="mt-4 text-muted-foreground">
             Nosso estoque está sendo atualizado. Fale com a gente pelo
             WhatsApp e conheça as novidades.
           </p>
           <a
-            href={whatsappLink(`Olá! Vim pelo site da ${site.name}.`)}
+            href={whatsappLink('Olá! Vim pelo site e gostaria de mais informações.')}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-7 py-4 font-display text-base font-bold uppercase tracking-wide text-black transition-transform hover:scale-[1.03]"
@@ -74,7 +74,7 @@ export function FlagshipHero({ car }: { car?: Car }) {
               href={whatsappLink(
                 `Olá! Tenho interesse no ${fullName} ${car.year} (${formatBRL(
                   car.price,
-                )}) anunciado na ${site.name}. Ainda está disponível?`,
+                )}) anunciado na ${SITE.name}. Ainda está disponível?`,
               )}
               target="_blank"
               rel="noopener noreferrer"
