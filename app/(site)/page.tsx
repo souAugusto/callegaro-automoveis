@@ -3,7 +3,7 @@ import { TrustBadges } from '@/components/home/trust-badges'
 import { FeaturedCars } from '@/components/home/featured-cars'
 import { Financing } from '@/components/home/financing'
 import { Location } from '@/components/home/location'
-import { getFlagshipCar } from '@/lib/data'
+import { getFlagshipCar } from '@/lib/db'
 
 export default async function HomePage() {
   const flagshipCar = await getFlagshipCar()

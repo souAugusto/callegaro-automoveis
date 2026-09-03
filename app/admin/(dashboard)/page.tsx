@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Car, Users, TrendingUp } from 'lucide-react'
-import { getAllCars, getAllLeads, formatBRL, formatDate } from '@/lib/data'
+import { getAllCars, getAllLeads } from '@/lib/db'
+import { formatBRL, formatDate } from '@/lib/data'
 import { Badge } from '@/components/ui/badge'
 import { leadStatusStyles } from '@/components/admin/lead-status-styles'
 

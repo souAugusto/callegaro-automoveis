@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getAllCars } from '@/lib/data'
+import { getAllCars } from '@/lib/db'
 import { SITE_NAME } from '@/lib/site'
 import { EstoqueBrowser } from '@/components/estoque/estoque-browser'
 

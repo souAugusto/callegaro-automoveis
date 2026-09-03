@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react'
 import { CarCard } from '@/components/car-card'
 import { SectionHeading } from '@/components/section-heading'
 import { ScrollReveal } from '@/components/scroll-reveal'
-import { getFeaturedCars } from '@/lib/data'
+import { getFeaturedCars } from '@/lib/db'
 
 export async function FeaturedCars({ excludeId }: { excludeId?: string } = {}) {
   const cars = await getFeaturedCars(excludeId)

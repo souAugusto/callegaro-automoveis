@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Plus, Pencil } from 'lucide-react'
-import { getAllCars, formatBRL, formatKm } from '@/lib/data'
+import { getAllCars } from '@/lib/db'
+import { formatBRL, formatKm } from '@/lib/data'
 import {
   Table,
   TableBody,

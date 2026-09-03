@@ -2,17 +2,8 @@
 
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import {
-  addCar,
-  updateCar,
-  deleteCar,
-  setFlagshipCar,
-  unsetFlagshipCar,
-  type Car,
-  type CarStatus,
-  type Transmission,
-  type Fuel,
-} from '@/lib/data'
+import { addCar, updateCar, deleteCar, setFlagshipCar, unsetFlagshipCar } from '@/lib/db'
+import type { Car, CarStatus, Transmission, Fuel } from '@/lib/data'
 
 export interface CarFormState {
   error?: string

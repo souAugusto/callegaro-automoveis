@@ -10,7 +10,8 @@ import {
   DoorOpen,
   Palette,
 } from 'lucide-react'
-import { getAllCars, getCarBySlug, formatBRL, formatKm } from '@/lib/data'
+import { getAllCars, getCarBySlug } from '@/lib/db'
+import { formatBRL, formatKm } from '@/lib/data'
 import { site, whatsappLink } from '@/lib/site'
 import { CarGallery } from '@/components/estoque/car-gallery'
 import { WhatsAppIcon } from '@/components/whatsapp-icon'

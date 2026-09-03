@@ -1,7 +1,8 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { updateLeadStatus, deleteLead, type LeadStatus } from '@/lib/data'
+import { updateLeadStatus, deleteLead } from '@/lib/db'
+import type { LeadStatus } from '@/lib/data'
 
 export async function changeLeadStatus(id: string, status: LeadStatus) {
   await updateLeadStatus(id, status)

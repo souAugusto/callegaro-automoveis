@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { addLead } from '@/lib/data'
+import { addLead } from '@/lib/db'
 
 export interface ContactFormState {
   success: boolean

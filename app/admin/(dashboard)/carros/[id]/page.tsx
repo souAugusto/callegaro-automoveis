@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
-import { getCarById } from '@/lib/data'
+import { getCarById } from '@/lib/db'
 import { CarForm } from '@/components/admin/car-form'
 import { updateCarAction } from '../actions'
 

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { getAllLeads, formatDate } from '@/lib/data'
+import { getAllLeads } from '@/lib/db'
+import { formatDate } from '@/lib/data'
 import {
   Table,
   TableBody,
