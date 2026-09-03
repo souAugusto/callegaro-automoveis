@@ -7,7 +7,7 @@ export function Logo({ className }: { className?: string }) {
   return (
     <Link
       href="/"
-      className={cn('group flex items-center', className)}
+      className="group inline-flex items-center"
       aria-label={`${site.name} - página inicial`}
     >
       <Image
@@ -16,7 +16,7 @@ export function Logo({ className }: { className?: string }) {
         width={1600}
         height={561}
         priority
-        className="h-10 w-auto rounded-md"
+        className={cn('h-10 w-auto rounded-md', className)}
       />
     </Link>
   )
