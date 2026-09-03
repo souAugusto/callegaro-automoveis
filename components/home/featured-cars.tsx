@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { CarCard } from '@/components/car-card'
 import { SectionHeading } from '@/components/section-heading'
+import { ScrollReveal } from '@/components/scroll-reveal'
 import { getFeaturedCars } from '@/lib/data'
 
 export function FeaturedCars({ excludeId }: { excludeId?: string } = {}) {
@@ -26,8 +27,10 @@ export function FeaturedCars({ excludeId }: { excludeId?: string } = {}) {
       </div>
 
       <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {cars.map((car) => (
-          <CarCard key={car.id} car={car} />
+        {cars.map((car, i) => (
+          <ScrollReveal key={car.id} delay={i * 0.08}>
+            <CarCard car={car} />
+          </ScrollReveal>
         ))}
       </div>
     </section>

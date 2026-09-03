@@ -5,6 +5,8 @@ import type { Car } from '@/lib/data'
 import { formatBRL, formatKm } from '@/lib/data'
 import { site, whatsappLink } from '@/lib/site'
 import { WhatsAppIcon } from '@/components/whatsapp-icon'
+import { EASE_CLASS } from '@/lib/motion'
+import { cn } from '@/lib/utils'
 
 export function FlagshipHero({ car }: { car?: Car }) {
   if (!car) {
@@ -91,14 +93,23 @@ export function FlagshipHero({ car }: { car?: Car }) {
           </div>
         </div>
 
-        <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10">
+        <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10">
           <Image
             src={car.images[0] || '/placeholder.svg'}
             alt={fullName}
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
+            className={cn(
+              'object-cover transition-transform duration-700 group-hover:scale-105',
+              EASE_CLASS,
+            )}
+          />
+          <div
+            className={cn(
+              'pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full',
+              EASE_CLASS,
+            )}
           />
         </div>
       </div>

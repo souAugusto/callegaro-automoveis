@@ -4,6 +4,7 @@ import { Calendar, Fuel, Gauge, Settings2 } from 'lucide-react'
 import type { Car } from '@/lib/data'
 import { formatBRL, formatKm } from '@/lib/data'
 import { cn } from '@/lib/utils'
+import { EASE_CLASS } from '@/lib/motion'
 
 const statusStyles: Record<Car['status'], string> = {
   Disponível: 'bg-brand-yellow text-black',
@@ -15,7 +16,11 @@ export function CarCard({ car }: { car: Car }) {
   return (
     <Link
       href={`/estoque/${car.slug}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-card transition-all hover:border-brand-yellow/60 hover:shadow-lg hover:shadow-brand-yellow/10"
+      className={cn(
+        'group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-card transition-all duration-500',
+        EASE_CLASS,
+        'hover:-translate-y-2 hover:border-brand-yellow/60 hover:shadow-2xl hover:shadow-black/40',
+      )}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-black">
         <Image
@@ -23,7 +28,10 @@ export function CarCard({ car }: { car: Car }) {
           alt={`${car.brand} ${car.model} ${car.version}`}
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className={cn(
+            'object-cover transition-transform duration-700 group-hover:scale-110',
+            EASE_CLASS,
+          )}
         />
         <span
           className={cn(

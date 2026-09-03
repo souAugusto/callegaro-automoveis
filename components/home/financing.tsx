@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { CheckCircle2, Zap, Wallet, Repeat } from 'lucide-react'
 import { WhatsAppIcon } from '@/components/whatsapp-icon'
+import { ScrollReveal } from '@/components/scroll-reveal'
 import { site, whatsappLink } from '@/lib/site'
 
 const bullets = [
@@ -25,7 +26,7 @@ export function Financing() {
   return (
     <section className="border-y border-white/10 bg-black">
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 lg:grid-cols-2">
-        <div className="relative order-last aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 lg:order-first">
+        <ScrollReveal className="relative order-last aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 lg:order-first">
           <Image
             src="/blog/financiamento-consignado.png"
             alt="Cliente assinando contrato de financiamento de carro"
@@ -33,9 +34,9 @@ export function Financing() {
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover"
           />
-        </div>
+        </ScrollReveal>
 
-        <div>
+        <ScrollReveal delay={0.1}>
           <span className="font-display text-sm font-bold uppercase tracking-widest text-brand-yellow">
             Financiamento facilitado
           </span>
@@ -77,7 +78,7 @@ export function Financing() {
             <WhatsAppIcon className="size-5" />
             Simular financiamento
           </a>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   )
