@@ -144,7 +144,12 @@ export function CarForm({
 
       <div className="space-y-2">
         <Label>Fotos</Label>
-        <ImageUploadField existingImages={car?.images} />
+        <ImageUploadField
+          existingImages={car?.images.map((url) => ({
+            url,
+            focus: car.imageFocus[url] ?? { x: 50, y: 50 },
+          }))}
+        />
       </div>
 
       <div className="space-y-2">

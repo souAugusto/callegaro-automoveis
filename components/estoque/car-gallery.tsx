@@ -2,13 +2,17 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import type { ImageFocus } from '@/lib/data'
+import { objectPosition } from '@/lib/data'
 import { cn } from '@/lib/utils'
 
 export function CarGallery({
   images,
+  imageFocus,
   alt,
 }: {
   images: string[]
+  imageFocus: Record<string, ImageFocus>
   alt: string
 }) {
   const [active, setActive] = useState(0)
@@ -24,6 +28,7 @@ export function CarGallery({
           priority
           sizes="(max-width: 1024px) 100vw, 60vw"
           className="object-cover"
+          style={{ objectPosition: objectPosition(imageFocus[list[active]]) }}
         />
       </div>
 
@@ -48,6 +53,7 @@ export function CarGallery({
                 fill
                 sizes="120px"
                 className="object-cover"
+                style={{ objectPosition: objectPosition(imageFocus[img]) }}
               />
             </button>
           ))}

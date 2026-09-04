@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Plus, Pencil } from 'lucide-react'
 import { getAllCars } from '@/lib/db'
-import { formatBRL, formatKm } from '@/lib/data'
+import { formatBRL, formatKm, objectPosition } from '@/lib/data'
 import {
   Table,
   TableBody,
@@ -74,6 +74,7 @@ export default async function AdminCarrosPage() {
                         fill
                         sizes="48px"
                         className="object-cover"
+                        style={{ objectPosition: objectPosition(car.imageFocus[car.images[0]]) }}
                       />
                     </div>
                     <div>

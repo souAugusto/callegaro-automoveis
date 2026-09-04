@@ -9,6 +9,14 @@ export type CarStatus = 'Disponível' | 'Reservado' | 'Vendido'
 export type Transmission = 'Manual' | 'Automático'
 export type Fuel = 'Flex' | 'Gasolina' | 'Diesel'
 
+/** Ponto de foco de uma foto, em porcentagem da largura/altura da imagem
+ * (0-100). Usado como object-position para decidir qual parte da foto
+ * fica visível quando ela é exibida cortada (object-cover). */
+export interface ImageFocus {
+  x: number
+  y: number
+}
+
 export interface Car {
   id: string
   slug: string
@@ -23,10 +31,18 @@ export interface Car {
   doors: number
   price: number
   images: string[]
+  imageFocus: Record<string, ImageFocus>
   status: CarStatus
   featured: boolean
   isFlagship: boolean
   description: string
+}
+
+/** CSS object-position para uma foto, considerando seu ponto de foco
+ * (ou o centro, se nenhum foi definido). */
+export function objectPosition(focus?: ImageFocus): string {
+  if (!focus) return '50% 50%'
+  return `${focus.x}% ${focus.y}%`
 }
 
 export function formatBRL(value: number): string {

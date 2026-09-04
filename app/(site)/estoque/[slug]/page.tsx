@@ -70,7 +70,7 @@ export default async function CarDetailPage({
 
       <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
         <div>
-          <CarGallery images={car.images} alt={fullName} />
+          <CarGallery images={car.images} imageFocus={car.imageFocus} alt={fullName} />
         </div>
 
         <div>

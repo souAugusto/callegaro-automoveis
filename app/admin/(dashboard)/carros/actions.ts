@@ -11,7 +11,7 @@ import {
   unsetFlagshipCar,
 } from '@/lib/db'
 import { uploadCarImage, deleteCarImage } from '@/lib/storage'
-import type { Car, CarStatus, Transmission, Fuel } from '@/lib/data'
+import type { Car, CarStatus, Transmission, Fuel, ImageFocus } from '@/lib/data'
 
 export interface CarFormState {
   error?: string
@@ -54,10 +54,24 @@ async function parseCarInput(
   }
 
   const order = formData.getAll('imageOrder').map((v) => String(v))
+  const focusXs = formData.getAll('imageFocusX').map((v) => Number(v))
+  const focusYs = formData.getAll('imageFocusY').map((v) => Number(v))
+
   let nextUploaded = 0
-  const images = order.map((token) =>
-    token === 'NOVA' ? uploadedImages[nextUploaded++] : token,
-  )
+  const images: string[] = []
+  const imageFocus: Record<string, ImageFocus> = {}
+
+  order.forEach((token, i) => {
+    const url = token === 'NOVA' ? uploadedImages[nextUploaded++] : token
+    if (!url) return
+    images.push(url)
+    const x = focusXs[i]
+    const y = focusYs[i]
+    imageFocus[url] = {
+      x: Number.isFinite(x) ? x : 50,
+      y: Number.isFinite(y) ? y : 50,
+    }
+  })
 
   return {
     brand,
@@ -71,6 +85,7 @@ async function parseCarInput(
     doors,
     price,
     images: images.length > 0 ? images : ['/placeholder.svg'],
+    imageFocus,
     status,
     featured,
     isFlagship,

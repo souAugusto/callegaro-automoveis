@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Calendar, Gauge, Settings2 } from 'lucide-react'
 import type { Car } from '@/lib/data'
-import { formatBRL, formatKm } from '@/lib/data'
+import { formatBRL, formatKm, objectPosition } from '@/lib/data'
 import { whatsappLink } from '@/lib/site-config'
 import { getSiteSettings } from '@/lib/db'
 import { WhatsAppIcon } from '@/components/whatsapp-icon'
@@ -108,6 +108,7 @@ export async function FlagshipHero({ car }: { car?: Car }) {
               'object-cover transition-transform duration-700 group-hover:scale-105',
               EASE_CLASS,
             )}
+            style={{ objectPosition: objectPosition(car.imageFocus[car.images[0]]) }}
           />
           <div
             className={cn(

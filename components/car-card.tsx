@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Calendar, Fuel, Gauge, Settings2 } from 'lucide-react'
 import type { Car } from '@/lib/data'
-import { formatBRL, formatKm } from '@/lib/data'
+import { formatBRL, formatKm, objectPosition } from '@/lib/data'
 import { cn } from '@/lib/utils'
 import { EASE_CLASS } from '@/lib/motion'
 
@@ -32,6 +32,7 @@ export function CarCard({ car }: { car: Car }) {
             'object-cover transition-transform duration-700 group-hover:scale-110',
             EASE_CLASS,
           )}
+          style={{ objectPosition: objectPosition(car.imageFocus[car.images[0]]) }}
         />
         <span
           className={cn(

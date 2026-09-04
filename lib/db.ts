@@ -6,7 +6,14 @@
 import 'server-only'
 
 import { supabase } from './supabase'
-import { slugify, type Car, type CarStatus, type Fuel, type Transmission } from './data'
+import {
+  slugify,
+  type Car,
+  type CarStatus,
+  type Fuel,
+  type ImageFocus,
+  type Transmission,
+} from './data'
 import { SITE_STATIC, DEFAULT_SITE, type SiteConfig } from './site-config'
 
 /* ------------------------------------------------------------------ */
@@ -27,6 +34,7 @@ interface CarRow {
   doors: number
   price: number | string
   images: string[] | null
+  image_focus: Record<string, ImageFocus> | null
   status: CarStatus
   featured: boolean
   is_flagship: boolean
@@ -48,6 +56,7 @@ function mapCarRow(row: CarRow): Car {
     doors: row.doors,
     price: Number(row.price),
     images: row.images ?? [],
+    imageFocus: row.image_focus ?? {},
     status: row.status,
     featured: row.featured,
     isFlagship: row.is_flagship,
@@ -71,6 +80,7 @@ function carInputToRow(input: Omit<Car, 'id' | 'slug'>) {
     doors: input.doors,
     price: input.price,
     images: input.images,
+    image_focus: input.imageFocus,
     status: input.status,
     featured: input.featured,
     description: input.description,
