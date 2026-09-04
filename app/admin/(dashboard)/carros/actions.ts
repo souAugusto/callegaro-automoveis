@@ -42,11 +42,6 @@ async function parseCarInput(
     return { error: 'Ano, km, portas e preço precisam ser números válidos.' }
   }
 
-  const existingImages = formData
-    .getAll('existingImages')
-    .map((v) => String(v))
-    .filter(Boolean)
-
   const newFiles = formData
     .getAll('newImages')
     .filter((v): v is File => v instanceof File && v.size > 0)
@@ -58,7 +53,11 @@ async function parseCarInput(
     return { error: 'Não foi possível enviar uma ou mais fotos. Tente novamente.' }
   }
 
-  const images = [...existingImages, ...uploadedImages]
+  const order = formData.getAll('imageOrder').map((v) => String(v))
+  let nextUploaded = 0
+  const images = order.map((token) =>
+    token === 'NOVA' ? uploadedImages[nextUploaded++] : token,
+  )
 
   return {
     brand,

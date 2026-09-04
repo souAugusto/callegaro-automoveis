@@ -2,23 +2,28 @@
 
 import { useRef, useState } from 'react'
 import Image from 'next/image'
-import { ImagePlus, X } from 'lucide-react'
+import { ImagePlus, X, ChevronLeft, ChevronRight } from 'lucide-react'
 
-interface NewImage {
-  file: File
-  preview: string
-}
+type ImageItem =
+  | { key: string; type: 'existing'; url: string }
+  | { key: string; type: 'new'; file: File; preview: string }
+
+let nextKey = 0
 
 export function ImageUploadField({
   existingImages = [],
 }: {
   existingImages?: string[]
 }) {
-  const [kept, setKept] = useState<string[]>(existingImages)
-  const [newImages, setNewImages] = useState<NewImage[]>([])
+  const [items, setItems] = useState<ImageItem[]>(
+    existingImages.map((url) => ({ key: `k${nextKey++}`, type: 'existing', url })),
+  )
   const inputRef = useRef<HTMLInputElement>(null)
 
-  function syncInput(files: File[]) {
+  function syncInput(current: ImageItem[]) {
+    const files = current
+      .filter((item): item is Extract<ImageItem, { type: 'new' }> => item.type === 'new')
+      .map((item) => item.file)
     const dt = new DataTransfer()
     files.forEach((f) => dt.items.add(f))
     if (inputRef.current) inputRef.current.files = dt.files
@@ -27,64 +32,92 @@ export function ImageUploadField({
   function handleFilesSelected(e: React.ChangeEvent<HTMLInputElement>) {
     const picked = Array.from(e.target.files ?? [])
     if (picked.length === 0) return
-    const additions = picked.map((file) => ({ file, preview: URL.createObjectURL(file) }))
-    const merged = [...newImages, ...additions]
-    setNewImages(merged)
-    syncInput(merged.map((m) => m.file))
+    const additions: ImageItem[] = picked.map((file) => ({
+      key: `k${nextKey++}`,
+      type: 'new',
+      file,
+      preview: URL.createObjectURL(file),
+    }))
+    const merged = [...items, ...additions]
+    setItems(merged)
+    syncInput(merged)
   }
 
-  function removeNew(index: number) {
-    const target = newImages[index]
-    if (target) URL.revokeObjectURL(target.preview)
-    const merged = newImages.filter((_, i) => i !== index)
-    setNewImages(merged)
-    syncInput(merged.map((m) => m.file))
+  function removeItem(key: string) {
+    const target = items.find((i) => i.key === key)
+    if (target?.type === 'new') URL.revokeObjectURL(target.preview)
+    const merged = items.filter((i) => i.key !== key)
+    setItems(merged)
+    syncInput(merged)
   }
 
-  function removeKept(url: string) {
-    setKept((prev) => prev.filter((u) => u !== url))
+  function moveItem(index: number, direction: -1 | 1) {
+    const target = index + direction
+    if (target < 0 || target >= items.length) return
+    const merged = [...items]
+    ;[merged[index], merged[target]] = [merged[target], merged[index]]
+    setItems(merged)
+    syncInput(merged)
   }
-
-  const hasAny = kept.length > 0 || newImages.length > 0
 
   return (
     <div className="space-y-3">
-      {hasAny && (
+      {items.length > 0 && (
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
-          {kept.map((url) => (
+          {items.map((item, index) => (
             <div
-              key={url}
+              key={item.key}
               className="group relative aspect-square overflow-hidden rounded-lg border border-white/10 bg-black"
             >
-              <Image src={url} alt="" fill sizes="120px" className="object-cover" />
-              <input type="hidden" name="existingImages" value={url} />
-              <button
-                type="button"
-                onClick={() => removeKept(url)}
-                aria-label="Remover foto"
-                className="absolute right-1 top-1 flex size-6 items-center justify-center rounded-full bg-black/70 text-white opacity-0 transition-opacity group-hover:opacity-100"
+              <Image
+                src={item.type === 'existing' ? item.url : item.preview}
+                alt=""
+                fill
+                sizes="120px"
+                className="object-cover"
+              />
+              {item.type === 'existing' && (
+                <input type="hidden" name="imageOrder" value={item.url} />
+              )}
+              {item.type === 'new' && <input type="hidden" name="imageOrder" value="NOVA" />}
+
+              <span
+                className={`absolute left-1 top-1 rounded px-1.5 py-0.5 text-[0.6rem] font-bold uppercase ${
+                  index === 0 ? 'bg-brand-yellow text-black' : 'bg-black/70 text-white'
+                }`}
               >
-                <X className="size-3.5" />
-              </button>
-            </div>
-          ))}
-          {newImages.map((img, i) => (
-            <div
-              key={img.preview}
-              className="group relative aspect-square overflow-hidden rounded-lg border border-brand-yellow/40 bg-black"
-            >
-              <Image src={img.preview} alt="" fill sizes="120px" className="object-cover" />
-              <span className="absolute left-1 top-1 rounded bg-brand-yellow px-1.5 py-0.5 text-[0.6rem] font-bold uppercase text-black">
-                Nova
+                {index === 0 ? 'Capa' : index + 1}
               </span>
+
               <button
                 type="button"
-                onClick={() => removeNew(i)}
+                onClick={() => removeItem(item.key)}
                 aria-label="Remover foto"
                 className="absolute right-1 top-1 flex size-6 items-center justify-center rounded-full bg-black/70 text-white opacity-0 transition-opacity group-hover:opacity-100"
               >
                 <X className="size-3.5" />
               </button>
+
+              <div className="absolute inset-x-1 bottom-1 flex justify-between opacity-0 transition-opacity group-hover:opacity-100">
+                <button
+                  type="button"
+                  onClick={() => moveItem(index, -1)}
+                  disabled={index === 0}
+                  aria-label="Mover para posição anterior"
+                  className="flex size-6 items-center justify-center rounded-full bg-black/70 text-white disabled:pointer-events-none disabled:opacity-30"
+                >
+                  <ChevronLeft className="size-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => moveItem(index, 1)}
+                  disabled={index === items.length - 1}
+                  aria-label="Mover para próxima posição"
+                  className="flex size-6 items-center justify-center rounded-full bg-black/70 text-white disabled:pointer-events-none disabled:opacity-30"
+                >
+                  <ChevronRight className="size-3.5" />
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -104,7 +137,12 @@ export function ImageUploadField({
         />
       </label>
 
-      {!hasAny && (
+      {items.length > 0 ? (
+        <p className="text-xs text-muted-foreground">
+          A foto marcada como "Capa" é a que aparece em destaque no site. Use
+          as setas para reordenar.
+        </p>
+      ) : (
         <p className="text-xs text-muted-foreground">
           Nenhuma foto selecionada. Sem fotos, o carro fica com uma imagem
           padrão.
