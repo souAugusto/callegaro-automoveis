@@ -59,6 +59,12 @@ export async function FlagshipHero({ car }: { car?: Car }) {
             {car.version}
           </p>
 
+          {car.description && (
+            <p className="mt-3 line-clamp-4 whitespace-pre-line text-sm text-muted-foreground">
+              {car.description}
+            </p>
+          )}
+
           <div className="mt-5 flex flex-wrap gap-4 text-sm text-muted-foreground">
             {specs.map((s, i) => (
               <span key={i} className="flex items-center gap-1.5">

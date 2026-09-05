@@ -12,6 +12,7 @@ import {
 } from '@/lib/db'
 import { uploadCarImage, deleteCarImage } from '@/lib/storage'
 import type { Car, CarStatus, Transmission, Fuel, ImageFocus } from '@/lib/data'
+import { slugify } from '@/lib/data'
 
 export interface CarFormState {
   error?: string
@@ -100,14 +101,33 @@ export async function createCarAction(
   const input = await parseCarInput(formData)
   if ('error' in input) return input
 
-  const car = await addCar(input)
+  let car: Car
+  try {
+    car = await addCar(input)
+  } catch (err) {
+    return {
+      error:
+        err instanceof Error
+          ? err.message
+          : 'Não foi possível salvar o carro. Tente novamente.',
+    }
+  }
+
   if (input.isFlagship) await setFlagshipCar(car.id)
   revalidatePath('/admin/carros')
   revalidatePath('/admin')
   revalidatePath('/estoque')
   revalidatePath(`/estoque/${car.slug}`)
   revalidatePath('/')
-  redirect('/admin/carros')
+
+  // Se o slug gerado ganhou um sufixo (já existia um carro com o mesmo
+  // nome/versão/ano), avisa na listagem em vez de deixar isso invisível.
+  const naiveSlug = slugify(`${input.brand}-${input.model}-${input.version}-${input.year}`)
+  const notice =
+    car.slug !== naiveSlug
+      ? `?slugAjustado=${encodeURIComponent(car.slug)}`
+      : ''
+  redirect(`/admin/carros${notice}`)
 }
 
 export async function updateCarAction(

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Plus, Pencil } from 'lucide-react'
+import { Plus, Pencil, Info } from 'lucide-react'
 import { getAllCars } from '@/lib/db'
 import { formatBRL, formatKm, objectPosition } from '@/lib/data'
 import {
@@ -25,11 +25,27 @@ const statusStyles: Record<string, string> = {
   Vendido: 'bg-brand-red text-white',
 }
 
-export default async function AdminCarrosPage() {
+export default async function AdminCarrosPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ slugAjustado?: string }>
+}) {
   const cars = await getAllCars()
+  const { slugAjustado } = await searchParams
 
   return (
     <div>
+      {slugAjustado && (
+        <div className="mb-4 flex items-start gap-2.5 rounded-xl border border-brand-yellow/30 bg-brand-yellow/10 p-4 text-sm text-brand-yellow">
+          <Info className="mt-0.5 size-4 shrink-0" />
+          <p>
+            Já existia um carro com esse nome, versão e ano. Para não gerar
+            um link duplicado, foi criado o endereço{' '}
+            <strong>/estoque/{slugAjustado}</strong> automaticamente.
+          </p>
+        </div>
+      )}
+
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-display text-2xl font-bold uppercase tracking-tight text-white">

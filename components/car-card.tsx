@@ -52,6 +52,12 @@ export function CarCard({ car }: { car: Car }) {
           {car.model} {car.version}
         </h3>
 
+        {car.description && (
+          <p className="mt-1.5 line-clamp-3 whitespace-pre-line text-sm text-muted-foreground">
+            {car.description}
+          </p>
+        )}
+
         <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">
             <Calendar className="size-3.5 text-brand-yellow" />

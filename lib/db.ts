@@ -149,15 +149,45 @@ export async function getCarById(id: string): Promise<Car | undefined> {
   return data ? mapCarRow(data) : undefined
 }
 
+/** Erro de código conhecido do Postgres (ex: 23505 = unique_violation). */
+function pgErrorCode(error: unknown): string | undefined {
+  return typeof error === 'object' && error !== null && 'code' in error
+    ? String((error as { code?: unknown }).code)
+    : undefined
+}
+
+/** Acha o primeiro slug livre a partir de uma base, tentando "base",
+ * "base-2", "base-3"... até não achar nenhum carro com esse slug. */
+async function findFreeSlug(base: string): Promise<string> {
+  let attempt = 1
+  while (true) {
+    const candidate = attempt === 1 ? base : `${base}-${attempt}`
+    const { data } = await supabase.from('cars').select('id').eq('slug', candidate).maybeSingle()
+    if (!data) return candidate
+    attempt++
+  }
+}
+
 export async function addCar(input: Omit<Car, 'id' | 'slug'>): Promise<Car> {
-  const slug = slugify(`${input.brand}-${input.model}-${input.version}-${input.year}`)
-  const { data, error } = await supabase
-    .from('cars')
-    .insert({ ...carInputToRow(input), slug })
-    .select()
-    .single()
-  if (error) throw error
-  return mapCarRow(data)
+  const baseSlug = slugify(`${input.brand}-${input.model}-${input.version}-${input.year}`)
+
+  // Tenta achar um slug livre e inserir; se ainda assim colidir (duas
+  // inserções concorrentes disputando o mesmo slug), tenta de novo com o
+  // próximo sufixo livre em vez de deixar o erro do Postgres estourar.
+  for (let i = 0; i < 5; i++) {
+    const slug = await findFreeSlug(baseSlug)
+    const { data, error } = await supabase
+      .from('cars')
+      .insert({ ...carInputToRow(input), slug })
+      .select()
+      .single()
+    if (!error) return mapCarRow(data)
+    if (pgErrorCode(error) !== '23505') throw error
+  }
+
+  throw new Error(
+    'Não foi possível gerar um identificador único para este carro. Tente novamente.',
+  )
 }
 
 export async function updateCar(
