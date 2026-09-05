@@ -38,10 +38,10 @@ export async function FlagshipHero({ car }: { car?: Car }) {
   }
 
   const fullName = `${car.brand} ${car.model} ${car.version}`
-  const specs = [
+  const specs: { icon: typeof Calendar; label: string | number }[] = [
     { icon: Calendar, label: car.year },
     { icon: Gauge, label: formatKm(car.km) },
-    { icon: Settings2, label: car.transmission },
+    ...(car.transmission ? [{ icon: Settings2, label: car.transmission }] : []),
   ]
 
   return (

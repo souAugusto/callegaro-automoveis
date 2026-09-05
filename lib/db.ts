@@ -29,9 +29,9 @@ interface CarRow {
   year: number
   km: number
   color: string
-  transmission: Transmission
+  transmission: Transmission | null
   fuel: Fuel
-  doors: number
+  doors: number | null
   price: number | string
   images: string[] | null
   image_focus: Record<string, ImageFocus> | null

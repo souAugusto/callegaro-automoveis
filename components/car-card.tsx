@@ -67,10 +67,12 @@ export function CarCard({ car }: { car: Car }) {
             <Gauge className="size-3.5 text-brand-yellow" />
             {formatKm(car.km)}
           </span>
-          <span className="flex items-center gap-1.5">
-            <Settings2 className="size-3.5 text-brand-yellow" />
-            {car.transmission}
-          </span>
+          {car.transmission && (
+            <span className="flex items-center gap-1.5">
+              <Settings2 className="size-3.5 text-brand-yellow" />
+              {car.transmission}
+            </span>
+          )}
           <span className="flex items-center gap-1.5">
             <Fuel className="size-3.5 text-brand-yellow" />
             {car.fuel}

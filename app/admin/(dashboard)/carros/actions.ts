@@ -12,7 +12,7 @@ import {
 } from '@/lib/db'
 import { uploadCarImage, deleteCarImage } from '@/lib/storage'
 import type { Car, CarStatus, Transmission, Fuel, ImageFocus } from '@/lib/data'
-import { slugify } from '@/lib/data'
+import { slugify, TRANSMISSION_UNSPECIFIED } from '@/lib/data'
 
 export interface CarFormState {
   error?: string
@@ -27,9 +27,14 @@ async function parseCarInput(
   const year = Number(formData.get('year'))
   const km = Number(formData.get('km'))
   const color = String(formData.get('color') || '').trim()
-  const transmission = String(formData.get('transmission') || '') as Transmission
+  const transmissionRaw = String(formData.get('transmission') || '').trim()
+  const transmission: Transmission | null =
+    transmissionRaw && transmissionRaw !== TRANSMISSION_UNSPECIFIED
+      ? (transmissionRaw as Transmission)
+      : null
   const fuel = String(formData.get('fuel') || '') as Fuel
-  const doors = Number(formData.get('doors'))
+  const doorsRaw = String(formData.get('doors') || '').trim()
+  const doors = doorsRaw ? Number(doorsRaw) : null
   const price = Number(formData.get('price'))
   const status = String(formData.get('status') || '') as CarStatus
   const featured = formData.get('featured') === 'on'
@@ -39,8 +44,11 @@ async function parseCarInput(
   if (!brand || !model || !version || !color || !description) {
     return { error: 'Preencha todos os campos obrigatórios.' }
   }
-  if (!year || !km || !doors || !price) {
-    return { error: 'Ano, km, portas e preço precisam ser números válidos.' }
+  if (!year || !km || !price) {
+    return { error: 'Ano, km e preço precisam ser números válidos.' }
+  }
+  if (doors !== null && !Number.isFinite(doors)) {
+    return { error: 'Portas precisa ser um número válido.' }
   }
 
   const newFiles = formData

@@ -26,9 +26,9 @@ export interface Car {
   year: number
   km: number
   color: string
-  transmission: Transmission
+  transmission: Transmission | null
   fuel: Fuel
-  doors: number
+  doors: number | null
   price: number
   images: string[]
   imageFocus: Record<string, ImageFocus>
@@ -65,6 +65,10 @@ export function slugify(text: string): string {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
 }
+
+/** Valor do <select> de câmbio no formulário do admin quando o campo,
+ * agora opcional, é deixado sem preencher. */
+export const TRANSMISSION_UNSPECIFIED = 'nao-informado'
 
 export const transmissions: Transmission[] = ['Manual', 'Automático']
 export const fuels: Fuel[] = ['Flex', 'Gasolina', 'Diesel']

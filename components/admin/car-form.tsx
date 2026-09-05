@@ -3,7 +3,7 @@
 import { useActionState } from 'react'
 import { Save } from 'lucide-react'
 import type { Car } from '@/lib/data'
-import { carStatuses, transmissions, fuels } from '@/lib/data'
+import { carStatuses, transmissions, fuels, TRANSMISSION_UNSPECIFIED } from '@/lib/data'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -76,22 +76,25 @@ export function CarForm({
           <Input id="color" name="color" defaultValue={car?.color} required />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="doors">Portas*</Label>
+          <Label htmlFor="doors">Portas</Label>
           <Input
             id="doors"
             name="doors"
             type="number"
-            defaultValue={car?.doors ?? 4}
-            required
+            defaultValue={car?.doors ?? undefined}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="transmission">Câmbio*</Label>
-          <Select name="transmission" defaultValue={car?.transmission ?? transmissions[0]}>
+          <Label htmlFor="transmission">Câmbio</Label>
+          <Select
+            name="transmission"
+            defaultValue={car?.transmission ?? TRANSMISSION_UNSPECIFIED}
+          >
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value={TRANSMISSION_UNSPECIFIED}>Não informado</SelectItem>
               {transmissions.map((t) => (
                 <SelectItem key={t} value={t}>
                   {t}

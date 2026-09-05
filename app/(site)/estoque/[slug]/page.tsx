@@ -33,7 +33,10 @@ export async function generateMetadata({
 
   const site = await getSiteSettings()
   const title = `${car.brand} ${car.model} ${car.version} ${car.year}`
-  const description = `${car.description} ${formatBRL(car.price)} — ${formatKm(car.km)}, ${car.transmission}, ${car.fuel}. Confira na ${site.name} em ${site.address.city}/${site.address.state}.`.trim()
+  const specSummary = [formatKm(car.km), car.transmission, car.fuel]
+    .filter(Boolean)
+    .join(', ')
+  const description = `${car.description} ${formatBRL(car.price)} — ${specSummary}. Confira na ${site.name} em ${site.address.city}/${site.address.state}.`.trim()
   const image = car.images[0]
 
   return {
@@ -98,9 +101,9 @@ export default async function CarDetailPage({
       value: car.km,
       unitCode: 'KMT',
     },
-    vehicleTransmission: car.transmission,
+    ...(car.transmission ? { vehicleTransmission: car.transmission } : {}),
     fuelType: car.fuel,
-    numberOfDoors: car.doors,
+    ...(car.doors ? { numberOfDoors: car.doors } : {}),
     color: car.color,
     image: car.images,
     description: car.description,
@@ -136,11 +139,13 @@ export default async function CarDetailPage({
   const specs = [
     { icon: Calendar, label: 'Ano', value: String(car.year) },
     { icon: Gauge, label: 'Quilometragem', value: formatKm(car.km) },
-    { icon: Settings2, label: 'Câmbio', value: car.transmission },
+    car.transmission ? { icon: Settings2, label: 'Câmbio', value: car.transmission } : null,
     { icon: Fuel, label: 'Combustível', value: car.fuel },
-    { icon: DoorOpen, label: 'Portas', value: `${car.doors} portas` },
+    car.doors ? { icon: DoorOpen, label: 'Portas', value: `${car.doors} portas` } : null,
     { icon: Palette, label: 'Cor', value: car.color },
-  ]
+  ].filter(
+    (spec): spec is { icon: typeof Calendar; label: string; value: string } => spec !== null,
+  )
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
