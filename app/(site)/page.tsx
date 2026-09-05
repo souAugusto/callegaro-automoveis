@@ -8,6 +8,12 @@ import { getFlagshipCar } from '@/lib/db'
 
 export const metadata: Metadata = {
   title: 'Carros Usados e Seminovos em Parobé, RS',
+  keywords: [
+    'carros usados Parobé',
+    'carros seminovos Parobé',
+    'revenda de carros RS',
+    'comprar carro usado',
+  ],
   alternates: {
     canonical: '/',
   },

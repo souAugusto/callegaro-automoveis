@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(SITE_STATIC.url),
     title: {
       default: `${site.name} — Carros Usados e Seminovos em Parobé, RS`,
-      template: '%s | Callegaro Automóveis',
+      template: `%s | ${site.name}`,
     },
     description: site.description,
     keywords: [
@@ -64,6 +64,9 @@ export async function generateMetadata(): Promise<Metadata> {
     robots: {
       index: true,
       follow: true,
+    },
+    verification: {
+      google: 'MEydQtmnwCB4WHteWumDi8MN77Pa9VtFonO0BB6NQ24',
     },
   }
 }

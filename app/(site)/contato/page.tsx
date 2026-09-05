@@ -14,11 +14,28 @@ import {
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteSettings()
+  const description = `Fale com a ${site.name}. Telefone, endereço e horário de atendimento em ${site.address.city}/${site.address.state}.`
   return {
     title: 'Contato e Localização',
-    description: `Fale com a ${site.name}. Telefone, endereço e horário de atendimento em ${site.address.city}/${site.address.state}.`,
+    description,
+    keywords: [
+      'contato revenda de carros',
+      `revenda de carros ${site.address.city}`,
+      site.name,
+    ],
     alternates: {
       canonical: '/contato',
+    },
+    openGraph: {
+      title: 'Contato e Localização',
+      description,
+      url: `${site.url}/contato`,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Contato e Localização',
+      description,
     },
   }
 }
@@ -73,11 +90,24 @@ export default async function ContatoPage() {
     })),
   }
 
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Início', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Contato', item: `${site.url}/contato` },
+    ],
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       <header className="mb-10 max-w-2xl">

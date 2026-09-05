@@ -30,11 +30,41 @@ export async function generateMetadata({
   const { slug } = await params
   const car = await getCarBySlug(slug)
   if (!car) return { title: 'Veículo não encontrado' }
+
+  const site = await getSiteSettings()
+  const title = `${car.brand} ${car.model} ${car.version} ${car.year}`
+  const description = `${car.description} ${formatBRL(car.price)} — ${formatKm(car.km)}, ${car.transmission}, ${car.fuel}. Confira na ${site.name} em ${site.address.city}/${site.address.state}.`.trim()
+  const image = car.images[0]
+
   return {
-    title: `${car.brand} ${car.model} ${car.year}`,
-    description: car.description,
+    title,
+    description,
+    keywords: [
+      car.brand,
+      car.model,
+      `${car.brand} ${car.model}`,
+      `${car.brand} ${car.model} usado`,
+      `${car.brand} ${car.model} seminovo`,
+      'carro usado Parobé',
+      site.name,
+    ],
     alternates: {
       canonical: `/estoque/${car.slug}`,
+    },
+    openGraph: {
+      title: `${title} — ${formatBRL(car.price)}`,
+      description,
+      url: `${site.url}/estoque/${car.slug}`,
+      type: 'website',
+      images: image
+        ? [{ url: image, width: 1200, height: 900, alt: title }]
+        : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${title} — ${formatBRL(car.price)}`,
+      description,
+      images: image ? [image] : undefined,
     },
   }
 }
@@ -49,6 +79,60 @@ export default async function CarDetailPage({
   if (!car) notFound()
 
   const fullName = `${car.brand} ${car.model} ${car.version}`
+
+  const availabilityMap: Record<typeof car.status, string> = {
+    Disponível: 'https://schema.org/InStock',
+    Reservado: 'https://schema.org/LimitedAvailability',
+    Vendido: 'https://schema.org/SoldOut',
+  }
+
+  const carJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Car',
+    name: `${fullName} ${car.year}`,
+    brand: { '@type': 'Brand', name: car.brand },
+    model: car.model,
+    vehicleModelDate: String(car.year),
+    mileageFromOdometer: {
+      '@type': 'QuantitativeValue',
+      value: car.km,
+      unitCode: 'KMT',
+    },
+    vehicleTransmission: car.transmission,
+    fuelType: car.fuel,
+    numberOfDoors: car.doors,
+    color: car.color,
+    image: car.images,
+    description: car.description,
+    url: `${site.url}/estoque/${car.slug}`,
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'BRL',
+      price: car.price,
+      availability: availabilityMap[car.status],
+      url: `${site.url}/estoque/${car.slug}`,
+      seller: {
+        '@type': 'AutoDealer',
+        name: site.name,
+      },
+    },
+  }
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Início', item: site.url },
+      { '@type': 'ListItem', position: 2, name: 'Estoque', item: `${site.url}/estoque` },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: `${fullName} ${car.year}`,
+        item: `${site.url}/estoque/${car.slug}`,
+      },
+    ],
+  }
+
   const specs = [
     { icon: Calendar, label: 'Ano', value: String(car.year) },
     { icon: Gauge, label: 'Quilometragem', value: formatKm(car.km) },
@@ -60,6 +144,14 @@ export default async function CarDetailPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(carJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Link
         href="/estoque"
         className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-brand-yellow"
