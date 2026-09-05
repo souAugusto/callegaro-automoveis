@@ -4,6 +4,7 @@ import { Inter, Oswald } from 'next/font/google'
 import './globals.css'
 import { SITE_STATIC } from '@/lib/site-config'
 import { getSiteSettings } from '@/lib/db'
+import { CookieConsentBanner } from '@/components/cookie-consent-banner'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -133,6 +134,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
+        <CookieConsentBanner />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

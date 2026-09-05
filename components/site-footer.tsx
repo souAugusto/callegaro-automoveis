@@ -51,6 +51,14 @@ export function SiteFooter({ site }: { site: SiteConfig }) {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link
+                href="/politica-de-privacidade"
+                className="text-muted-foreground transition-colors hover:text-white"
+              >
+                Política de Privacidade
+              </Link>
+            </li>
           </ul>
         </div>
 
