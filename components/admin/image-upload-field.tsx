@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react'
 import Image from 'next/image'
-import { ImagePlus, X, ChevronLeft, ChevronRight, Focus } from 'lucide-react'
+import { ImagePlus, X, Focus } from 'lucide-react'
 import type { ImageFocus } from '@/lib/data'
 import { ImageFocusPicker } from './image-focus-picker'
 
@@ -11,6 +11,9 @@ type ImageItem =
   | { key: string; type: 'new'; file: File; preview: string; focus: ImageFocus }
 
 const CENTER: ImageFocus = { x: 50, y: 50 }
+
+// Distância mínima (px) antes de um toque/clique virar arraste.
+const DRAG_THRESHOLD = 5
 
 let nextKey = 0
 
@@ -28,6 +31,8 @@ export function ImageUploadField({
     })),
   )
   const [editingKey, setEditingKey] = useState<string | null>(null)
+  const [draggingKey, setDraggingKey] = useState<string | null>(null)
+  const pressRef = useRef<{ key: string; x: number; y: number } | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   function syncInput(current: ImageItem[]) {
@@ -63,13 +68,42 @@ export function ImageUploadField({
     if (editingKey === key) setEditingKey(null)
   }
 
-  function moveItem(index: number, direction: -1 | 1) {
-    const target = index + direction
-    if (target < 0 || target >= items.length) return
+  function moveItemTo(key: string, targetIndex: number) {
+    const from = items.findIndex((i) => i.key === key)
+    if (from === -1 || from === targetIndex) return
     const merged = [...items]
-    ;[merged[index], merged[target]] = [merged[target], merged[index]]
+    const [moved] = merged.splice(from, 1)
+    merged.splice(targetIndex, 0, moved)
     setItems(merged)
     syncInput(merged)
+  }
+
+  function handlePointerDown(e: React.PointerEvent<HTMLDivElement>, key: string) {
+    if (e.button !== 0 || (e.target as HTMLElement).closest('button')) return
+    e.currentTarget.setPointerCapture(e.pointerId)
+    pressRef.current = { key, x: e.clientX, y: e.clientY }
+  }
+
+  function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    const press = pressRef.current
+    if (!press) return
+    if (!draggingKey) {
+      const dist = Math.hypot(e.clientX - press.x, e.clientY - press.y)
+      if (dist < DRAG_THRESHOLD) return
+      setDraggingKey(press.key)
+    }
+    const over = document
+      .elementFromPoint(e.clientX, e.clientY)
+      ?.closest<HTMLElement>('[data-image-key]')
+    const overKey = over?.dataset.imageKey
+    if (!overKey || overKey === press.key) return
+    const targetIndex = items.findIndex((i) => i.key === overKey)
+    if (targetIndex !== -1) moveItemTo(press.key, targetIndex)
+  }
+
+  function handlePointerEnd() {
+    pressRef.current = null
+    setDraggingKey(null)
   }
 
   function setFocus(key: string, focus: ImageFocus) {
@@ -85,14 +119,24 @@ export function ImageUploadField({
           {items.map((item, index) => (
             <div
               key={item.key}
-              className="group relative aspect-square overflow-hidden rounded-lg border border-white/10 bg-black"
+              data-image-key={item.key}
+              onPointerDown={(e) => handlePointerDown(e, item.key)}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerEnd}
+              onPointerCancel={handlePointerEnd}
+              className={`group relative aspect-square touch-none select-none overflow-hidden rounded-lg border bg-black transition-opacity ${
+                draggingKey === item.key
+                  ? 'cursor-grabbing border-brand-yellow opacity-50'
+                  : 'cursor-grab border-white/10'
+              }`}
             >
               <Image
                 src={item.type === 'existing' ? item.url : item.preview}
                 alt=""
                 fill
                 sizes="120px"
-                className="object-cover"
+                draggable={false}
+                className="pointer-events-none object-cover"
                 style={{ objectPosition: `${item.focus.x}% ${item.focus.y}%` }}
               />
               <input
@@ -120,16 +164,7 @@ export function ImageUploadField({
                 <X className="size-3.5" />
               </button>
 
-              <div className="absolute inset-x-1 bottom-1 flex items-center justify-between opacity-0 transition-opacity group-hover:opacity-100">
-                <button
-                  type="button"
-                  onClick={() => moveItem(index, -1)}
-                  disabled={index === 0}
-                  aria-label="Mover para posição anterior"
-                  className="flex size-6 items-center justify-center rounded-full bg-black/70 text-white disabled:pointer-events-none disabled:opacity-30"
-                >
-                  <ChevronLeft className="size-3.5" />
-                </button>
+              <div className="absolute bottom-1 left-1/2 -translate-x-1/2 opacity-0 transition-opacity group-hover:opacity-100">
                 <button
                   type="button"
                   onClick={() => setEditingKey(editingKey === item.key ? null : item.key)}
@@ -141,15 +176,6 @@ export function ImageUploadField({
                   }`}
                 >
                   <Focus className="size-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => moveItem(index, 1)}
-                  disabled={index === items.length - 1}
-                  aria-label="Mover para próxima posição"
-                  className="flex size-6 items-center justify-center rounded-full bg-black/70 text-white disabled:pointer-events-none disabled:opacity-30"
-                >
-                  <ChevronRight className="size-3.5" />
                 </button>
               </div>
             </div>
@@ -181,8 +207,8 @@ export function ImageUploadField({
 
       {items.length > 0 ? (
         <p className="text-xs text-muted-foreground">
-          A foto marcada como "Capa" aparece em destaque no site. Use as
-          setas para reordenar e o ícone de foco para escolher a parte da
+          A foto marcada como "Capa" aparece em destaque no site. Arraste
+          as fotos para reordenar e use o ícone de foco para escolher a parte da
           foto que fica visível quando ela é cortada.
         </p>
       ) : (
