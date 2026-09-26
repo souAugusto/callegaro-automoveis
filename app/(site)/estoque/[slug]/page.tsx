@@ -33,7 +33,7 @@ export async function generateMetadata({
 
   const site = await getSiteSettings()
   const title = `${car.brand} ${car.model} ${car.version} ${car.year}`
-  const specSummary = [formatKm(car.km), car.transmission, car.fuel]
+  const specSummary = [car.km !== null ? formatKm(car.km) : null, car.transmission, car.fuel]
     .filter(Boolean)
     .join(', ')
   const description = `${car.description} ${formatBRL(car.price)} — ${specSummary}. Confira na ${site.name} em ${site.address.city}/${site.address.state}.`.trim()
@@ -96,11 +96,15 @@ export default async function CarDetailPage({
     brand: { '@type': 'Brand', name: car.brand },
     model: car.model,
     vehicleModelDate: String(car.year),
-    mileageFromOdometer: {
-      '@type': 'QuantitativeValue',
-      value: car.km,
-      unitCode: 'KMT',
-    },
+    ...(car.km !== null
+      ? {
+          mileageFromOdometer: {
+            '@type': 'QuantitativeValue',
+            value: car.km,
+            unitCode: 'KMT',
+          },
+        }
+      : {}),
     ...(car.transmission ? { vehicleTransmission: car.transmission } : {}),
     fuelType: car.fuel,
     ...(car.doors ? { numberOfDoors: car.doors } : {}),
@@ -138,7 +142,7 @@ export default async function CarDetailPage({
 
   const specs = [
     { icon: Calendar, label: 'Ano', value: String(car.year) },
-    { icon: Gauge, label: 'Quilometragem', value: formatKm(car.km) },
+    car.km !== null ? { icon: Gauge, label: 'Quilometragem', value: formatKm(car.km) } : null,
     car.transmission ? { icon: Settings2, label: 'Câmbio', value: car.transmission } : null,
     { icon: Fuel, label: 'Combustível', value: car.fuel },
     car.doors ? { icon: DoorOpen, label: 'Portas', value: `${car.doors} portas` } : null,

@@ -63,10 +63,12 @@ export function CarCard({ car }: { car: Car }) {
             <Calendar className="size-3.5 text-brand-yellow" />
             {car.year}
           </span>
-          <span className="flex items-center gap-1.5">
-            <Gauge className="size-3.5 text-brand-yellow" />
-            {formatKm(car.km)}
-          </span>
+          {car.km !== null && (
+            <span className="flex items-center gap-1.5">
+              <Gauge className="size-3.5 text-brand-yellow" />
+              {formatKm(car.km)}
+            </span>
+          )}
           {car.transmission && (
             <span className="flex items-center gap-1.5">
               <Settings2 className="size-3.5 text-brand-yellow" />

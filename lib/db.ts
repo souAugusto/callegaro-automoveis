@@ -27,7 +27,7 @@ interface CarRow {
   model: string
   version: string
   year: number
-  km: number
+  km: number | null
   color: string
   transmission: Transmission | null
   fuel: Fuel

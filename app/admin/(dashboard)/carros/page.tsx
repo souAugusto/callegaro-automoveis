@@ -107,7 +107,7 @@ export default async function AdminCarrosPage({
                   {car.year}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {formatKm(car.km)}
+                  {car.km !== null ? formatKm(car.km) : '—'}
                 </TableCell>
                 <TableCell className="font-medium text-brand-yellow">
                   {formatBRL(car.price)}

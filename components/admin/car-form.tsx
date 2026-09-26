@@ -62,13 +62,13 @@ export function CarForm({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="km">Quilometragem*</Label>
+          <Label htmlFor="km">Quilometragem</Label>
           <Input
             id="km"
             name="km"
             type="number"
-            defaultValue={car?.km}
-            required
+            min={0}
+            defaultValue={car?.km ?? undefined}
           />
         </div>
         <div className="space-y-2">

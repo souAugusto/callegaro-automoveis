@@ -25,7 +25,8 @@ async function parseCarInput(
   const model = String(formData.get('model') || '').trim()
   const version = String(formData.get('version') || '').trim()
   const year = Number(formData.get('year'))
-  const km = Number(formData.get('km'))
+  const kmRaw = String(formData.get('km') || '').trim()
+  const km = kmRaw ? Number(kmRaw) : null
   const color = String(formData.get('color') || '').trim()
   const transmissionRaw = String(formData.get('transmission') || '').trim()
   const transmission: Transmission | null =
@@ -44,8 +45,11 @@ async function parseCarInput(
   if (!brand || !model || !version || !color || !description) {
     return { error: 'Preencha todos os campos obrigatórios.' }
   }
-  if (!year || !km || !price) {
-    return { error: 'Ano, km e preço precisam ser números válidos.' }
+  if (!year || !price) {
+    return { error: 'Ano e preço precisam ser números válidos.' }
+  }
+  if (km !== null && (!Number.isFinite(km) || km < 0)) {
+    return { error: 'Quilometragem precisa ser um número válido.' }
   }
   if (doors !== null && !Number.isFinite(doors)) {
     return { error: 'Portas precisa ser um número válido.' }
